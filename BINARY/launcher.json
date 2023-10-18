@@ -1,19 +1,5 @@
 [
   {
-    "caption": "EAMC Log Lookup Tool",
-    "path": "Y:\\IMD\\System Administration\\_AdminApps\\EAMC Log Lookup Tool\\EAMC Log Lookup Tool.exe",
-    "gridLocation": "0, 0",
-    "standardControl": null,
-    "adminControl": null
-  },
-  {
-    "caption": "XRayVision",
-    "path": "\\\\138.138.36.214\\Apteryx\\XrayVisionDCV.exe",
-    "gridLocation": "0, 0",
-    "standardControl": null,
-    "adminControl": null
-  },
-  {
     "caption": "PowerShell ISE",
     "path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
     "gridLocation": "0, 0",
