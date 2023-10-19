@@ -3,21 +3,15 @@
     "caption": "PowerShell ISE",
     "path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
     "gridLocation": "0, 0",
-    "standardControl": null,
-    "adminControl": null
   },
   {
     "caption": "Snipping Tool",
     "path": "c:\\windows\\system32\\SnippingTool.exe",
     "gridLocation": "0, 0",
-    "standardControl": null,
-    "adminControl": null
   },
   {
     "caption": "ADUC",
     "path": "c:\\windows\\system32\\dsa.msc",
     "gridLocation": "0, 0",
-    "standardControl": null,
-    "adminControl": null
   }
 ]
