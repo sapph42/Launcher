@@ -51,7 +51,7 @@ namespace Launcher {
             newButton.Tag = Path;
             newButton.Text = Caption;
             newButton.UseVisualStyleBackColor = true;
-            newButton.AllowDrop = true;
+            //newButton.AllowDrop = true;
             StandardControl = newButton.Clone();
             newButton.Name = $"adm_Button_{GridLocation.X}_{GridLocation.Y}";
             AdminControl = newButton.Clone();

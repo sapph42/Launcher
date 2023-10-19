@@ -91,9 +91,9 @@ namespace Launcher {
         }
 
         private void ConstructButtons() {
-            int i = 0;
             foreach (ButtonInfo button in this) {
-                button.ButtonBuilder(Buffer, Height, Width, i);
+                int index = (button.GridLocation.Y - 1) * _y + (button.GridLocation.X - 1);
+                button.ButtonBuilder(Buffer, Height, Width, index);
             }
         }
 

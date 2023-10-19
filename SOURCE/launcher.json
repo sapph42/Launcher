@@ -1,17 +1,42 @@
 [
   {
-    "caption": "PowerShell ISE",
-    "path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
-    "gridLocation": "0, 0",
+    "Caption": "EAMC Log Lookup Tool",
+    "Path": "Y:\\IMD\\System Administration\\_AdminApps\\EAMC Log Lookup Tool\\EAMC Log Lookup Tool.exe",
+    "GridLocation": "1, 1"
   },
   {
-    "caption": "Snipping Tool",
-    "path": "c:\\windows\\system32\\SnippingTool.exe",
-    "gridLocation": "0, 0",
+    "Caption": "SQL Server Management Studio",
+    "Path": "C:\\Program Files (x86)\\Microsoft SQL Server Management Studio 18\\Common7\\IDE\\Ssms.exe",
+    "GridLocation": "2, 2"
   },
   {
-    "caption": "ADUC",
-    "path": "c:\\windows\\system32\\dsa.msc",
-    "gridLocation": "0, 0",
+    "Caption": "XRayVision",
+    "Path": "\\\\138.138.36.214\\Apteryx\\XrayVisionDCV.exe",
+    "GridLocation": "1, 3"
+  },
+  {
+    "Caption": "PowerShell ISE",
+    "Path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
+    "GridLocation": "3, 2"
+  },
+  {
+    "Caption": "Snipping Tool",
+    "Path": "c:\\windows\\system32\\SnippingTool.exe",
+    "GridLocation": "2, 3"
+  },
+  {
+    "Caption": "ADUC",
+    "Path": "c:\\windows\\system32\\dsa.msc",
+    "GridLocation": "2, 1"
+  },
+  {
+    "Caption": "Bomgar Console",
+    "Path": "C:\\Program Files\\Bomgar\\Representative Console\\chat.gsc.health.mil\\bomgar-rep.exe",
+    "GridLocation": "3, 1"
+  },
+  {
+    "Caption": "Visual Studio 19",
+    "Path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Professional\\Common7\\IDE\\devenv.exe",
+    "GridLocation": "1, 2"
   }
 ]
