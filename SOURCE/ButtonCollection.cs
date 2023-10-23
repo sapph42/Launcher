@@ -118,21 +118,13 @@ namespace Launcher {
             foreach (ButtonInfo button in this) {
                 if (button.Equals(button1)) {
                     button.GridLocation = temp2;
-                    Point buttonLocation = new Point(
-                        (Buffer * button.GridLocation.X) + (Width * (button.GridLocation.X - 1)),
-                        (Buffer * button.GridLocation.Y) + (Height * (button.GridLocation.Y - 1))
-                    );
-                    button.StandardControl.Location = buttonLocation;
-                    button.AdminControl.Location = buttonLocation;
+                    button.Caption = button1.Caption;
+                    button.Path = button1.Path;
                 }
                 if (button.Equals(button2)) {
                     button.GridLocation = temp1;
-                    Point buttonLocation = new Point(
-                        (Buffer * button.GridLocation.X) + (Width * (button.GridLocation.X - 1)),
-                        (Buffer * button.GridLocation.Y) + (Height * (button.GridLocation.Y - 1))
-                    );
-                    button.StandardControl.Location = buttonLocation;
-                    button.AdminControl.Location = buttonLocation;
+                    button.Caption = button2.Caption;
+                    button.Path = button2.Path;
                 }
             }
         }

@@ -7,9 +7,9 @@ namespace Launcher {
     [JsonObject(MemberSerialization.OptIn)]
     internal class ButtonInfo {
         [JsonProperty]
-        public readonly string Caption;
+        public string Caption;
         [JsonProperty]
-        public readonly string Path;
+        public string Path;
         [JsonProperty]
         public Point GridLocation;
         public Button StandardControl;
@@ -51,7 +51,7 @@ namespace Launcher {
             newButton.Tag = Path;
             newButton.Text = Caption;
             newButton.UseVisualStyleBackColor = true;
-            //newButton.AllowDrop = true;
+            newButton.AllowDrop = true;
             StandardControl = newButton.Clone();
             newButton.Name = $"adm_Button_{GridLocation.X}_{GridLocation.Y}";
             AdminControl = newButton.Clone();
