@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms;
 using System.IO;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace Launcher {
         private readonly MouseEventHandler _mouseUp;
         private readonly DragEventHandler _dragEnter;
         private readonly DragEventHandler _dragDrop;
-        private bool RearrangeMode = false;
+        private bool _rearrangeMode = false;
 
         [System.Runtime.InteropServices.DllImport("Kernel32.Dll", EntryPoint = "Wow64EnableWow64FsRedirection")]
         public static extern bool EnableWow64FSRedirection(bool enable);
@@ -41,21 +40,44 @@ namespace Launcher {
             _click = delegate(object s, EventArgs e) {
                 EnableWow64FSRedirection(false);
                 Button button = (Button)s;
+                ButtonInfo parent = (ButtonInfo)button.Tag;
+                if (string.IsNullOrEmpty(button.Text))
+                    return;
                 Debug.WriteLine("Click event " + button.Text);
-                Process process = new Process {
-                    StartInfo = {
-                        FileName = button.Tag.ToString(),
-                        UseShellExecute = button.Parent.Name == "adminPage" ? true : false,
-                        Verb = button.Parent.Name == "adminPage" ? "runas" : ""
+                if (string.IsNullOrEmpty(parent.Path))
+                    return;
+                FileInfo target = new FileInfo(parent.Path);
+                if (target.Extension == ".ps1") {
+                    Process process = new Process {
+                        StartInfo = {
+                            FileName = "powershell.exe",
+                            Arguments = $@"-File {button.Tag} -ExecutionPolicy Bypass",
+                            UseShellExecute = button.Parent.Name == "adminPage",
+                            Verb = button.Parent.Name == "adminPage" ? "runas" : ""
+                        }
+                    };
+                } else {
+                    Process process = new Process {
+                        StartInfo = {
+                            FileName = parent.Path,
+                            UseShellExecute = button.Parent.Name == "adminPage",
+                            Verb = button.Parent.Name == "adminPage" ? "runas" : ""
+                        }
+                    };
+                    try {
+                        process.Start();
                     }
-                };
-                process.Start();
+                    catch (System.ComponentModel.Win32Exception) {
+                        Debug.WriteLine("UAC Cancelled");
+                    }
+                }
+                    
                 EnableWow64FSRedirection(true);
             };
             _mouseDown = delegate(object s, MouseEventArgs e) {
                 Button button = (Button)s;
                 Debug.WriteLine("MouseDown event " + button.Text);
-                button.DoDragDrop(button.Text, DragDropEffects.Move);
+                button.DoDragDrop(button.Tag, DragDropEffects.Move);
             };
             _mouseUp = delegate(object s, MouseEventArgs e) {
                 Button button = (Button)s;
@@ -65,24 +87,26 @@ namespace Launcher {
                 Button button = (Button)s;
                 Debug.WriteLine("DragEnter event " + button.Text);
                 if (
-                    e.Data.GetDataPresent(DataFormats.Text) 
+                    e.Data.GetDataPresent(DataFormats.Serializable) 
                     && s != null
-                    && _buttons.Any(b => b.Caption == e.Data.GetData(DataFormats.Text).ToString())
+                    && _buttons.Any(b => b.Equals(e.Data.GetData(DataFormats.Serializable)))
                 )
                     e.Effect = DragDropEffects.Move;
                 else
                     e.Effect = DragDropEffects.None;
             };
             _dragDrop = delegate(object s, DragEventArgs e) {
-                string otherCaption = e.Data.GetData(DataFormats.Text).ToString();
                 Button button = (Button)s;
-                Button target = button.Parent.Controls.OfType<Button>().First(b => b.Text == otherCaption);
+                ButtonInfo button1 = (ButtonInfo)button.Tag;
+                ButtonInfo button2 = (ButtonInfo)e.Data.GetData(DataFormats.Serializable);
+                Button target = button.Name.Substring(0, 3) == "std"
+                    ? button2.StandardControl
+                    : button2.AdminControl;
                 Debug.WriteLine("DragDrop event " + button.Text);
-                ButtonInfo button1 = _buttons.First(b => b.Caption == button.Text);
-                ButtonInfo button2 = _buttons.First(b => b.Caption == otherCaption);
+
                 _buttons.Rearrange(button1, button2);
                 string textHold = button.Text;
-                string pathHold = button.Tag.ToString();
+                ButtonInfo pathHold = (ButtonInfo)button.Tag;
                 button.Text = target.Text;
                 button.Tag = target.Tag;
                 target.Text = textHold;
@@ -95,19 +119,22 @@ namespace Launcher {
             DrawButtons();
         }
 
-        private void DrawButtons() {
+        private void DrawButtons(bool redraw = false) {
             tabControl.SuspendLayout();
             standardPage.SuspendLayout();
             adminPage.SuspendLayout();
             SuspendLayout();
-            //foreach (Control control in standardPage.Controls) {
-            //    if (control is Button)
-            //        standardPage.Controls.Remove(control);
-            //}
-            //foreach (Control control in adminPage.Controls) {
-            //    if (control is Button)
-            //        standardPage.Controls.Remove(control);
-            //}
+            if (redraw) {
+                foreach (Control control in standardPage.Controls) {
+                    if (control is Button)
+                        standardPage.Controls.Remove(control);
+                }
+
+                foreach (Control control in adminPage.Controls) {
+                    if (control is Button)
+                        adminPage.Controls.Remove(control);
+                }
+            }
             Size pageControlSize = new Size() {
                 Width = ButtonBuffer + ((ButtonBuffer + ButtonWidth) * _buttons.X),
                 Height = ButtonBuffer + ((ButtonBuffer + ButtonHeight) * _buttons.Y)
@@ -125,17 +152,18 @@ namespace Launcher {
                 Height = TabControlBufferHeight + tabControl.Size.Height + TabControlBufferHeight + titleBarHeight
             };
             SwapButton.Location = new Point(Size.Width - 54, SwapButton.Location.Y);
+            AddButton.Location = new Point(SwapButton.Location.X - 30, AddButton.Location.Y);
             foreach (ButtonInfo button in _buttons) {
                 button.StandardControl.Click += _click;
                 button.AdminControl.Click += _click;
-                //button.StandardControl.MouseDown += _mouseDown;
-                //button.AdminControl.MouseDown += _mouseDown;
                 button.StandardControl.MouseUp += _mouseUp;
                 button.AdminControl.MouseUp += _mouseUp;
                 button.StandardControl.DragEnter += _dragEnter;
                 button.AdminControl.DragEnter += _dragEnter;
                 button.StandardControl.DragDrop += _dragDrop;
                 button.AdminControl.DragDrop += _dragDrop;
+                button.StandardControl.ContextMenuStrip = ContextMenuStrip;
+                button.AdminControl.ContextMenuStrip = ContextMenuStrip;
 
                 standardPage.Controls.Add(button.StandardControl);
                 adminPage.Controls.Add(button.AdminControl);
@@ -153,7 +181,7 @@ namespace Launcher {
         }
 
         private void SwapButton_Click(object sender, EventArgs e) {
-            if (RearrangeMode) {
+            if (_rearrangeMode) {
                 SwapButton.BackgroundImage = Properties.Resources.SwapIcon;
                 foreach (Button button in standardPage.Controls.OfType<Button>()) {
                     button.MouseDown -= _mouseDown;
@@ -172,7 +200,48 @@ namespace Launcher {
                 }
             }
 
-            RearrangeMode = !RearrangeMode;
+            _rearrangeMode = !_rearrangeMode;
+        }
+
+        private void AddButton_Click(object sender, EventArgs e) {
+            CreateOrEditButton createOrEditButton = new CreateOrEditButton();
+            createOrEditButton.ShowDialog();
+            if (createOrEditButton.DialogResult == DialogResult.Cancel)
+                return;
+            ButtonInfo newButton = new ButtonInfo(createOrEditButton.Caption, createOrEditButton.Path);
+            _buttons.Add(newButton);
+            _buttons.Validate();
+            DrawButtons(true);
+        }
+
+        private void editToolStripMenuItem_Click(object sender, EventArgs e) {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            if (item is null)
+                return;
+            ContextMenuStrip strip = item.GetCurrentParent() as ContextMenuStrip;
+            Button button = strip.SourceControl as Button;
+            if (button is null)
+                return;
+            ButtonInfo buttonInfo = (ButtonInfo)button.Tag;
+            CreateOrEditButton createOrEditButton = new CreateOrEditButton(buttonInfo.Path, buttonInfo.Caption);
+            createOrEditButton.ShowDialog();
+            if (createOrEditButton.DialogResult == DialogResult.Cancel)
+                return;
+            button.Text = createOrEditButton.Caption;
+            _buttons.EditButton(buttonInfo, createOrEditButton.Caption, createOrEditButton.Path);
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e) {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            if (item is null)
+                return;
+            ContextMenuStrip strip = item.GetCurrentParent() as ContextMenuStrip;
+            Button button = strip.SourceControl as Button;
+            if (button is null)
+                return;
+            ButtonInfo buttonInfo = (ButtonInfo)button.Tag;
+            _buttons.ClearButton(buttonInfo);
+            button.Text = "";
         }
     }
 }

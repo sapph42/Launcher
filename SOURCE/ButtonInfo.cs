@@ -2,6 +2,7 @@
 using System.Drawing;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 
 namespace Launcher {
     [JsonObject(MemberSerialization.OptIn)]
@@ -14,6 +15,8 @@ namespace Launcher {
         public Point GridLocation;
         public Button StandardControl;
         public Button AdminControl;
+
+        private readonly Color _psBlue = Color.FromArgb(68, 119, 209);
 
         public ButtonInfo(string caption, string path, Point grid, Button standard, Button admin) {
             Caption = caption;
@@ -48,10 +51,15 @@ namespace Launcher {
             newButton.Name = $"std_Button_{GridLocation.X}_{GridLocation.Y}";
             newButton.Size = new Size(width, height);
             newButton.TabIndex = index;
-            newButton.Tag = Path;
+            newButton.Tag = this;
             newButton.Text = Caption;
             newButton.UseVisualStyleBackColor = true;
             newButton.AllowDrop = true;
+            if (!string.IsNullOrEmpty(Caption) && !string.IsNullOrEmpty(Path)) {
+                FileInfo target = new FileInfo(Path);
+                newButton.BackColor = target.Extension == ".ps1" ? _psBlue : SystemColors.Control;
+                newButton.ForeColor = target.Extension == ".ps1" ? Color.GhostWhite : SystemColors.ControlText;
+            }
             StandardControl = newButton.Clone();
             newButton.Name = $"adm_Button_{GridLocation.X}_{GridLocation.Y}";
             AdminControl = newButton.Clone();
@@ -59,11 +67,22 @@ namespace Launcher {
 
         public bool Equals(ButtonInfo other) {
             return Caption == other.Caption
-                   && Path == other.Path;
+                   && Path == other.Path
+                   && GridLocation.Equals(other.GridLocation);
         }
 
         public new int GetHashCode() {
-            return HashCode.Combine(Caption, Path);
+            return HashCode.Combine(Caption, Path, GridLocation);
+        }
+
+        public void Edit(string newCaption, string newPath) {
+            Caption = newCaption;
+            Path = newPath;
+        }
+
+        public void Clear() {
+            Caption = "";
+            Path = "";
         }
     }
 }

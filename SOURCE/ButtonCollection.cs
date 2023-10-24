@@ -75,21 +75,40 @@ namespace Launcher {
             int x = 1;
             int y = 1;
             if (
-                this.All(b => b.GridLocation != _default) 
-                && this.GroupBy(b => b.GridLocation).All(g => g.Count() == 1)
-            )
+                this.All(b => b.GridLocation != _default)
+                && this.GroupBy(b => b.GridLocation)
+                    .All(g => g.Count() == 1)
+            ) {
+                FillEmptySlots();
                 return;
+            }
             foreach (ButtonInfo button in this) {
-                if (y > _y) {
-                    y = 1;
-                    x++;
+                if (x > _x) {
+                    x = 1;
+                    y++;
                 }
 
                 button.GridLocation = new Point(x, y);
-                y++;
+                x++;
             }
+            FillEmptySlots();
         }
 
+        private void FillEmptySlots() {
+            bool[,] filled = new bool[_x, _y];
+            for (int x = 0; x < _x; x++) {
+                for (int y = 0; y < _y; y++)
+                    filled[x, y] = false;
+            }
+            foreach (ButtonInfo button in this) {
+                filled[button.GridLocation.X-1, button.GridLocation.Y-1] = true;
+            }
+            for (int x = 0; x < _x; x++) {
+                for (int y = 0; y < _y; y++)
+                     if (!filled[x, y])
+                         Add(new ButtonInfo("","", new Point(x+1, y+1)));
+            }
+        }
         private void ConstructButtons() {
             foreach (ButtonInfo button in this) {
                 int index = (button.GridLocation.Y - 1) * _y + (button.GridLocation.X - 1);
@@ -127,6 +146,14 @@ namespace Launcher {
                     button.Path = button2.Path;
                 }
             }
+        }
+
+        public void EditButton(ButtonInfo button, string newCaption, string newPath) {
+            this.First(bi => bi.Equals(button)).Edit(newCaption, newPath);
+        }
+
+        public void ClearButton(ButtonInfo button) {
+            this.First(bi => bi.Equals(button)).Clear();
         }
     }
 }
