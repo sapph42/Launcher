@@ -5,6 +5,7 @@ using System;
 using System.IO;
 
 namespace Launcher {
+    [Serializable]
     [JsonObject(MemberSerialization.OptIn)]
     internal class ButtonInfo {
         [JsonProperty]

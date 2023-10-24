@@ -47,29 +47,30 @@ namespace Launcher {
                 if (string.IsNullOrEmpty(parent.Path))
                     return;
                 FileInfo target = new FileInfo(parent.Path);
+                Process process;
                 if (target.Extension == ".ps1") {
-                    Process process = new Process {
+                    process = new Process {
                         StartInfo = {
                             FileName = "powershell.exe",
-                            Arguments = $@"-File {button.Tag} -ExecutionPolicy Bypass",
+                            Arguments = $@"-File ""{parent.Path}"" -ExecutionPolicy Bypass",
                             UseShellExecute = button.Parent.Name == "adminPage",
                             Verb = button.Parent.Name == "adminPage" ? "runas" : ""
                         }
                     };
-                } else {
-                    Process process = new Process {
+                }
+                else {
+                    process = new Process {
                         StartInfo = {
                             FileName = parent.Path,
                             UseShellExecute = button.Parent.Name == "adminPage",
                             Verb = button.Parent.Name == "adminPage" ? "runas" : ""
                         }
                     };
-                    try {
-                        process.Start();
-                    }
-                    catch (System.ComponentModel.Win32Exception) {
-                        Debug.WriteLine("UAC Cancelled");
-                    }
+                }
+                try {
+                    process.Start();
+                } catch (System.ComponentModel.Win32Exception) {
+                    Debug.WriteLine("UAC Cancelled");
                 }
                     
                 EnableWow64FSRedirection(true);
@@ -77,7 +78,7 @@ namespace Launcher {
             _mouseDown = delegate(object s, MouseEventArgs e) {
                 Button button = (Button)s;
                 Debug.WriteLine("MouseDown event " + button.Text);
-                button.DoDragDrop(button.Tag, DragDropEffects.Move);
+                button.DoDragDrop((ButtonInfo)button.Tag, DragDropEffects.Move);
             };
             _mouseUp = delegate(object s, MouseEventArgs e) {
                 Button button = (Button)s;
@@ -87,9 +88,9 @@ namespace Launcher {
                 Button button = (Button)s;
                 Debug.WriteLine("DragEnter event " + button.Text);
                 if (
-                    e.Data.GetDataPresent(DataFormats.Serializable) 
+                    e.Data.GetDataPresent("Launcher.ButtonInfo") 
                     && s != null
-                    && _buttons.Any(b => b.Equals(e.Data.GetData(DataFormats.Serializable)))
+                    && _buttons.Any(b => b.Equals(e.Data.GetData("Launcher.ButtonInfo")))
                 )
                     e.Effect = DragDropEffects.Move;
                 else
@@ -98,7 +99,7 @@ namespace Launcher {
             _dragDrop = delegate(object s, DragEventArgs e) {
                 Button button = (Button)s;
                 ButtonInfo button1 = (ButtonInfo)button.Tag;
-                ButtonInfo button2 = (ButtonInfo)e.Data.GetData(DataFormats.Serializable);
+                ButtonInfo button2 = (ButtonInfo)e.Data.GetData("Launcher.ButtonInfo");
                 Button target = button.Name.Substring(0, 3) == "std"
                     ? button2.StandardControl
                     : button2.AdminControl;
