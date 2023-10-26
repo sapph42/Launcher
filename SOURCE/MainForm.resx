@@ -117,22 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="SwapButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        xAAADsQBlSsOGwAAAXBJREFUSEutljGygjAQhuno8SqeR+hEKqwtZJQGC1uvgFdgvItnYBjGch8bNrgx
-        u77nw2/mL/j3ZxMDxAQwg7IsIQgCVZfLBdQB6rqGoijgeDwa7fd76PueqiNSU0+UnWiaRg4OCsOQUiNS
-        xhNlDff7XQ6R3g3A4b5TWS6XUyGKIjifz3A6naCqKrNMj8eDkiO8EYf7ToUX/oKW536AM3OMF223W7rN
-        R8oLEk1HGlLW0263kwuk9XpN7XzyPBfvsTKrg8EkScRAHMem0Rym3/86CF5/A2eBsywzzdM0JWc++hP8
-        EJwUTm6z2ZAz8pUB3i3v7AFWq5XT3Mq+IL9+aPgqauArLN1jRZ+AXOTSkLKCRNORBm4jUt6KVudpcDRf
-        Q8sP12pB9Luug8PhYLZw3MpxS18sFlMWt3zO4H02APcl4Z8WZ/DkIBdHqlvdbjdKPRl8OczFadvWHADw
-        AaLwYHC9XqnqE5ijhdDUCo8m/wfgB2EG1cKh9KyhAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <metadata name="ContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="RightClickMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>168, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAICAAAAEAIACoEAAAFgAAACgAAAAgAAAAQAAAAAEAIAAAAAAAABAAAMMOAADDDgAAAAAAAAAA

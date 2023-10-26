@@ -13,13 +13,15 @@ namespace Launcher {
     public partial class CreateOrEditButton : Form {
         public string Path;
         public string Caption;
+        public string Arguments;
         public new DialogResult DialogResult = DialogResult.None;
 
-        public CreateOrEditButton() : this("", "") { }
+        public CreateOrEditButton() : this("", "", "") { }
 
-        public CreateOrEditButton(string path, string caption) {
+        public CreateOrEditButton(string path, string caption, string arguments = "") {
             Path = path;
             Caption = caption;
+            Arguments = arguments;
             InitializeComponent();
         }
 
@@ -28,6 +30,8 @@ namespace Launcher {
                 PathTextBox.Text = Path;
             if (!string.IsNullOrEmpty(Caption))
                 CaptionTextBox.Text = Caption;
+            if (!string.IsNullOrEmpty(Arguments))
+                ArgumentsTextBox.Text = Arguments;
         }
 
         private void BrowseButton_Click(object sender, EventArgs e) {
@@ -44,6 +48,7 @@ namespace Launcher {
 
         private void OK_Click(object sender, EventArgs e) {
             Caption = CaptionTextBox.Text;
+            Arguments = ArgumentsTextBox.Text;
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -51,6 +56,7 @@ namespace Launcher {
         private void Cancel_Click(object sender, EventArgs e) {
             Path = string.Empty;
             Caption = string.Empty;
+            Arguments = string.Empty;
             DialogResult = DialogResult.Cancel;
             Close();
         }
@@ -59,6 +65,7 @@ namespace Launcher {
             if (DialogResult != DialogResult.None) return;
             Path = string.Empty;
             Caption = string.Empty;
+            Arguments = string.Empty;
             DialogResult = DialogResult.Cancel;
         }
 

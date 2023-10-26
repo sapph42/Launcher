@@ -31,6 +31,8 @@ namespace Launcher {
             this.OK = new System.Windows.Forms.Button();
             this.Cancel = new System.Windows.Forms.Button();
             this.PathTextBox = new System.Windows.Forms.TextBox();
+            this.ArgumentsTextBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -55,7 +57,7 @@ namespace Launcher {
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 96);
+            this.label2.Location = new System.Drawing.Point(12, 123);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(62, 13);
             this.label2.TabIndex = 3;
@@ -63,14 +65,14 @@ namespace Launcher {
             // 
             // CaptionTextBox
             // 
-            this.CaptionTextBox.Location = new System.Drawing.Point(80, 93);
+            this.CaptionTextBox.Location = new System.Drawing.Point(80, 120);
             this.CaptionTextBox.Name = "CaptionTextBox";
             this.CaptionTextBox.Size = new System.Drawing.Size(240, 20);
             this.CaptionTextBox.TabIndex = 4;
             // 
             // OK
             // 
-            this.OK.Location = new System.Drawing.Point(15, 119);
+            this.OK.Location = new System.Drawing.Point(15, 146);
             this.OK.Name = "OK";
             this.OK.Size = new System.Drawing.Size(75, 23);
             this.OK.TabIndex = 5;
@@ -81,7 +83,7 @@ namespace Launcher {
             // Cancel
             // 
             this.Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Cancel.Location = new System.Drawing.Point(245, 119);
+            this.Cancel.Location = new System.Drawing.Point(245, 146);
             this.Cancel.Name = "Cancel";
             this.Cancel.Size = new System.Drawing.Size(75, 23);
             this.Cancel.TabIndex = 6;
@@ -100,13 +102,31 @@ namespace Launcher {
             this.PathTextBox.TabIndex = 7;
             this.PathTextBox.TabStop = false;
             // 
+            // ArgumentsTextBox
+            // 
+            this.ArgumentsTextBox.Location = new System.Drawing.Point(80, 93);
+            this.ArgumentsTextBox.Name = "ArgumentsTextBox";
+            this.ArgumentsTextBox.Size = new System.Drawing.Size(240, 20);
+            this.ArgumentsTextBox.TabIndex = 9;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 96);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(57, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Arguments";
+            // 
             // CreateOrEditButton
             // 
             this.AcceptButton = this.OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.Cancel;
-            this.ClientSize = new System.Drawing.Size(329, 154);
+            this.ClientSize = new System.Drawing.Size(329, 181);
+            this.Controls.Add(this.ArgumentsTextBox);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.PathTextBox);
             this.Controls.Add(this.Cancel);
             this.Controls.Add(this.OK);
@@ -132,5 +152,7 @@ namespace Launcher {
         private System.Windows.Forms.Button OK;
         private System.Windows.Forms.Button Cancel;
         private System.Windows.Forms.TextBox PathTextBox;
+        private System.Windows.Forms.TextBox ArgumentsTextBox;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -2,41 +2,151 @@
   {
     "Caption": "EAMC Log Lookup Tool",
     "Path": "Y:\\IMD\\System Administration\\_AdminApps\\EAMC Log Lookup Tool\\EAMC Log Lookup Tool.exe",
+    "Arguments": null,
     "GridLocation": "1, 1"
   },
   {
     "Caption": "SQL Server Management Studio",
     "Path": "C:\\Program Files (x86)\\Microsoft SQL Server Management Studio 18\\Common7\\IDE\\Ssms.exe",
-    "GridLocation": "2, 2"
-  },
-  {
-    "Caption": "XRayVision",
-    "Path": "\\\\138.138.36.214\\Apteryx\\XrayVisionDCV.exe",
-    "GridLocation": "1, 3"
-  },
-  {
-    "Caption": "PowerShell ISE",
-    "Path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
-    "GridLocation": "3, 2"
-  },
-  {
-    "Caption": "Snipping Tool",
-    "Path": "c:\\windows\\system32\\SnippingTool.exe",
-    "GridLocation": "2, 3"
-  },
-  {
-    "Caption": "ADUC",
-    "Path": "c:\\windows\\system32\\dsa.msc",
+    "Arguments": null,
     "GridLocation": "2, 1"
+  },
+  {
+    "Caption": "Remote Desktop",
+    "Path": "C:\\Windows\\System32\\mstsc.exe",
+    "Arguments": "",
+    "GridLocation": "3, 1"
   },
   {
     "Caption": "Bomgar Console",
     "Path": "C:\\Program Files\\Bomgar\\Representative Console\\chat.gsc.health.mil\\bomgar-rep.exe",
-    "GridLocation": "3, 1"
+    "Arguments": null,
+    "GridLocation": "4, 1"
+  },
+  {
+    "Caption": "PowerShell ISE",
+    "Path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
+    "Arguments": null,
+    "GridLocation": "5, 1"
+  },
+  {
+    "Caption": "Admin Tools",
+    "Path": "C:\\Users\\bradley.j.schmidt\\OneDrive - militaryhealth\\Desktop\\AdminTools.msc",
+    "Arguments": "",
+    "GridLocation": "1, 2"
+  },
+  {
+    "Caption": "Group Policy Management",
+    "Path": "C:\\Windows\\System32\\gpmc.msc",
+    "Arguments": "",
+    "GridLocation": "2, 2"
+  },
+  {
+    "Caption": "Notepad++",
+    "Path": "C:\\Program Files\\Notepad++\\notepad++.exe",
+    "Arguments": null,
+    "GridLocation": "3, 2"
+  },
+  {
+    "Caption": "Stale Object Exemption Manager",
+    "Path": "C:\\Temp\\AccountManager\\StaleObjectExemptionManager\\StaleObjectExemptionManager.exe",
+    "Arguments": "",
+    "GridLocation": "4, 2"
+  },
+  {
+    "Caption": "Print Management",
+    "Path": "C:\\Users\\bradley.j.schmidt\\OneDrive - militaryhealth\\Desktop\\PrintManagement.msc",
+    "Arguments": "",
+    "GridLocation": "5, 2"
+  },
+  {
+    "Caption": "SCOM",
+    "Path": "C:\\Program Files\\Microsoft System Center\\Operations Manager\\Console\\Microsoft.EnterpriseManagement.Monitoring.Console.exe",
+    "Arguments": "",
+    "GridLocation": "1, 3"
+  },
+  {
+    "Caption": "SysAdmin Tools Updater",
+    "Path": "C:\\Temp\\AccountManager\\Updater.ps1",
+    "Arguments": "",
+    "GridLocation": "2, 3"
+  },
+  {
+    "Caption": "Account Creator",
+    "Path": "C:\\Temp\\AccountManager\\AccountManager\\AccountManager.ps1",
+    "Arguments": "",
+    "GridLocation": "3, 3"
+  },
+  {
+    "Caption": "Disable Account",
+    "Path": "C:\\Temp\\AccountManager\\OutProcessing\\DisableAccount.ps1",
+    "Arguments": "",
+    "GridLocation": "4, 3"
+  },
+  {
+    "Caption": "Q-Flow Restart",
+    "Path": "C:\\Temp\\AccountManager\\QFlowKiosks\\QFlowRestart.ps1",
+    "Arguments": "",
+    "GridLocation": "5, 3"
+  },
+  {
+    "Caption": "724 Pump Check",
+    "Path": "C:\\Users\\bradley.j.schmidt\\OneDrive - militaryhealth\\Desktop\\Scripts\\Check 724 Pump.ps1",
+    "Arguments": "",
+    "GridLocation": "1, 4"
   },
   {
     "Caption": "Visual Studio 19",
     "Path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Professional\\Common7\\IDE\\devenv.exe",
-    "GridLocation": "1, 2"
+    "Arguments": null,
+    "GridLocation": "2, 4"
+  },
+  {
+    "Caption": "Bomgar Console",
+    "Path": "C:\\Program Files\\Bomgar\\Representative Console\\chat.gsc.health.mil\\bomgar-rep.exe",
+    "Arguments": null,
+    "GridLocation": "3, 4"
+  },
+  {
+    "Caption": "PowerShell ISE",
+    "Path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
+    "Arguments": null,
+    "GridLocation": "4, 4"
+  },
+  {
+    "Caption": "Bomgar Console",
+    "Path": "C:\\Program Files\\Bomgar\\Representative Console\\chat.gsc.health.mil\\bomgar-rep.exe",
+    "Arguments": null,
+    "GridLocation": "5, 4"
+  },
+  {
+    "Caption": "Snipping Tool",
+    "Path": "c:\\windows\\system32\\SnippingTool.exe",
+    "Arguments": null,
+    "GridLocation": "1, 5"
+  },
+  {
+    "Caption": "PowerShell ISE",
+    "Path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
+    "Arguments": null,
+    "GridLocation": "2, 5"
+  },
+  {
+    "Caption": "Snipping Tool",
+    "Path": "c:\\windows\\system32\\SnippingTool.exe",
+    "Arguments": null,
+    "GridLocation": "3, 5"
+  },
+  {
+    "Caption": "Notepad++",
+    "Path": "C:\\Program Files\\Notepad++\\notepad++.exe",
+    "Arguments": null,
+    "GridLocation": "4, 5"
+  },
+  {
+    "Caption": "",
+    "Path": "",
+    "Arguments": "",
+    "GridLocation": "5, 5"
   }
 ]

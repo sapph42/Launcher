@@ -2,73 +2,99 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Launcher {
-    internal class ButtonCollection : List<ButtonInfo> {
+    internal class ButtonCollection : HashSet<LauncherButton> {
 
-        private int _x;
-        private int _y;
+        private int _width;
+        private int _height;
         private readonly Point _default = new Point(0, 0);
 
-        public int X => _x;
-        public int Y => _y;
+        public int Width => _width;
+        public int Height => _height;
 
-        public int Buffer { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public int ButtonBuffer { get; set; }
+        public int ButtonWidth { get; set; }
+        public int ButtonHeight { get; set; }
+        public int GridBufferHeight { get; set; }
+        public int GridBufferWidth { get; set; }
 
         public ButtonCollection() { }
 
-        public ButtonCollection(int buffer, int width, int height) {
-            Buffer = buffer;
-            Width = width;
-            Height = height;
+        public ButtonCollection(int buttonBuffer, int buttonWidth, int buttonHeight) {
+            ButtonBuffer = buttonBuffer;
+            ButtonWidth = buttonWidth;
+            ButtonHeight = buttonHeight;
         }
 
-        public new void Add(ButtonInfo thisButton) {
-            base.Add(thisButton);
+        public new void Add(LauncherButton thisButton) {
+            _ = base.Add(thisButton);
             CalcGridSize();
             if (this.Select(bc => bc.GridLocation).Any(p => p.Equals(_default)))
                 ArrangeGrid();
         }
 
-        public new void AddRange(IEnumerable<ButtonInfo> collection) {
-            base.AddRange(collection);
+        public void Add(LauncherButton thisButton, bool noRecalc) {
+            _ = base.Add(thisButton);
+            if (noRecalc)
+                return;
             CalcGridSize();
             if (this.Select(bc => bc.GridLocation).Any(p => p.Equals(_default)))
                 ArrangeGrid();
+        }
+
+        public void AddRange(IEnumerable<LauncherButton> collection) {
+            foreach (LauncherButton button in collection) {
+                if (!this.Any(b => b.Caption==button.Caption && b.Path==button.Path && b.Arguments==button.Arguments))
+                    _ = base.Add(button);
+            }
+            CalcGridSize();
+            if (this.Select(bc => bc.GridLocation).Any(p => p.Equals(_default)))
+                ArrangeGrid();
+        }
+
+        public void Remove(IEnumerable<LauncherButton> collection, bool noRecalc = false) {
+            foreach (LauncherButton item in collection) {
+                if (Contains(item))
+                    Remove(item);
+            }
+            if (noRecalc)
+                return;
+            CalcGridSize();
         }
 
         private void CalcGridSize() {
             if (Count == 0) {
-                _x = 0;
-                _y = 0;
+                _width = 0;
+                _height = 0;
                 return;
             }
-            int buttonGridWidth = 1;
-            int buttonGridHeight = 1;
+
+            if (!this.Select(bc => bc.GridLocation).Any(p => p.Equals(_default))) {
+                _width = this.Max(b => b.GridLocation.X);
+                _height = this.Max(b => b.GridLocation.Y);
+                return;
+            }
             switch (Count) {
                 case 1:
-                    buttonGridHeight = 1;
-                    buttonGridWidth = 1;
+                    _height = 1;
+                    _width = 1;
                     break;
                 case 2:
-                    buttonGridHeight = 1;
-                    buttonGridWidth = 2;
+                    _height = 1;
+                    _width = 2;
                     break;
                 case int n when (n >= 3):
-                    buttonGridWidth = (int)Math.Round(Math.Sqrt(Count));
-                    float ratio = (float)Count / buttonGridWidth;
+                    _width = (int)Math.Round(Math.Sqrt(Count));
+                    float ratio = (float)Count / _width;
                     var prelimHeight = (int)Math.Round(ratio);
-                    int prelimArea = prelimHeight * buttonGridWidth;
+                    int prelimArea = prelimHeight * _width;
                     int offset = prelimArea < Count ? Count - prelimArea : 0;
-                    buttonGridHeight = prelimHeight + offset;
+                    _height = prelimHeight + offset;
                     break;
             }
-
-            _x = buttonGridWidth;
-            _y = buttonGridHeight;
         }
 
         private void ArrangeGrid() {
@@ -82,8 +108,8 @@ namespace Launcher {
                 FillEmptySlots();
                 return;
             }
-            foreach (ButtonInfo button in this) {
-                if (x > _x) {
+            foreach (LauncherButton button in this) {
+                if (x > _width) {
                     x = 1;
                     y++;
                 }
@@ -95,65 +121,45 @@ namespace Launcher {
         }
 
         private void FillEmptySlots() {
-            bool[,] filled = new bool[_x, _y];
-            for (int x = 0; x < _x; x++) {
-                for (int y = 0; y < _y; y++)
+            bool[,] filled = new bool[_width, _height];
+            for (int x = 0; x < _width; x++) {
+                for (int y = 0; y < _height; y++)
                     filled[x, y] = false;
             }
-            foreach (ButtonInfo button in this) {
+            foreach (LauncherButton button in this) {
                 filled[button.GridLocation.X-1, button.GridLocation.Y-1] = true;
             }
-            for (int x = 0; x < _x; x++) {
-                for (int y = 0; y < _y; y++)
+            for (int x = 0; x < _width; x++) {
+                for (int y = 0; y < _height; y++)
                      if (!filled[x, y])
-                         Add(new ButtonInfo("","", new Point(x+1, y+1)));
+                         Add(new LauncherButton("","", new Point(x+1, y+1)), true);
             }
         }
         private void ConstructButtons() {
-            foreach (ButtonInfo button in this) {
-                int index = (button.GridLocation.Y - 1) * _y + (button.GridLocation.X - 1);
-                button.ButtonBuilder(Buffer, Height, Width, index);
+            foreach (LauncherButton button in this) {
+                int index = (button.GridLocation.Y - 1) * _height + (button.GridLocation.X - 1);
+                button.Location = new Point(
+                        (ButtonBuffer * button.GridLocation.X) + (ButtonWidth * (button.GridLocation.X-1)) + GridBufferWidth,
+                        (ButtonBuffer * button.GridLocation.Y) + (ButtonHeight * (button.GridLocation.Y - 1)) + GridBufferHeight
+                    );
+                button.Size = new Size(ButtonWidth, ButtonHeight);
+                button.TabIndex = index;
+                button.UseVisualStyleBackColor = true;
+                button.AllowDrop = true;
+                button.ColorCheck();
+                button.Name = $"button_{button.GridLocation.X}_{button.GridLocation.Y}";
             }
         }
 
-        public void Validate() {
-            CalcGridSize();
+        public void Validate(bool overrideSizeCalc = false) {
+            if (overrideSizeCalc)
+                CalcGridSize();
+            else {
+                _width = this.Max(b => b.GridLocation.X);
+                _height = this.Max(b => b.GridLocation.Y);
+            }
             ArrangeGrid();
             ConstructButtons();
-        }
-
-        public List<Button> Buttons() {
-            List<Button> buttons = new List<Button>();
-            foreach (ButtonInfo button in this) {
-                buttons.Add(button.StandardControl);
-                buttons.Add(button.AdminControl);
-            }
-
-            return buttons;
-        }
-        public void Rearrange(ButtonInfo button1, ButtonInfo button2) {
-            Point temp1 = button1.GridLocation;
-            Point temp2 = button2.GridLocation;
-            foreach (ButtonInfo button in this) {
-                if (button.Equals(button1)) {
-                    button.GridLocation = temp2;
-                    button.Caption = button1.Caption;
-                    button.Path = button1.Path;
-                }
-                if (button.Equals(button2)) {
-                    button.GridLocation = temp1;
-                    button.Caption = button2.Caption;
-                    button.Path = button2.Path;
-                }
-            }
-        }
-
-        public void EditButton(ButtonInfo button, string newCaption, string newPath) {
-            this.First(bi => bi.Equals(button)).Edit(newCaption, newPath);
-        }
-
-        public void ClearButton(ButtonInfo button) {
-            this.First(bi => bi.Equals(button)).Clear();
         }
     }
 }
