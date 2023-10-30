@@ -80,7 +80,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -107,13 +107,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Confirm.png" />
-    <None Include="Resources\Add_16x.png" />
+    <None Include="white_rocket.ico" />
     <None Include="Resources\Add.png" />
     <None Include="Resources\Remove.png" />
+    <Content Include="Resources\white_rocket.ico" />
     <Content Include="rocket.ico" />
-    <None Include="Resources\SwapIcon.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PostBuildEvent>copy /D /B /Y "$(TargetPath)" "Y:\IMD\System Administration\_AdminApps\Launcher"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

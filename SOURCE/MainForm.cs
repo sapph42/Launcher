@@ -5,6 +5,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using Launcher.Properties;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 
 namespace Launcher {
@@ -26,10 +29,50 @@ namespace Launcher {
         private readonly DragEventHandler _dragDrop;
         private bool _rearrangeMode = false;
         private LauncherButton _dragSource;
-        private string _version;
+        private readonly string _version;
 
         [System.Runtime.InteropServices.DllImport("Kernel32.Dll", EntryPoint = "Wow64EnableWow64FsRedirection")]
         public static extern bool EnableWow64FSRedirection(bool enable);
+
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+
+        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+        private static bool UseImmersiveDarkMode(IntPtr handle, bool enabled) {
+            int useImmersiveDarkMode = enabled ? 1 : 0;
+            return DwmSetWindowAttribute(handle, DWMWA_USE_IMMERSIVE_DARK_MODE, ref useImmersiveDarkMode, sizeof(int)) == 0;
+        }
+
+        private class DarkRenderer : ToolStripProfessionalRenderer {
+            protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e) {
+                Rectangle rc = new Rectangle(Point.Empty, e.Item.Size);
+                Color c = e.Item.Selected ? Color.Black : SystemColors.ControlDarkDark;
+                using (SolidBrush brush = new SolidBrush(c))
+                    e.Graphics.FillRectangle(brush, rc);
+            }
+
+            protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e) {
+                e.ArrowColor = Color.GhostWhite;
+                base.OnRenderArrow(e);
+            }
+
+            protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e) {
+                int width = e.Item.Width;
+                int height = e.Item.Height;
+                Rectangle rc = new Rectangle(Point.Empty, e.Item.Size);
+                Color c = e.Item.Selected ? Color.Black : SystemColors.ControlDarkDark;
+                using (SolidBrush brush = new SolidBrush(c)) {
+                    e.Graphics.FillRectangle(brush, rc);
+                    e.Graphics.DrawLine(new Pen(Color.GhostWhite), 4, height / 2, width - 4, height / 2);
+                }
+            }
+
+            protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e) {
+                e.TextColor = Color.GhostWhite;
+                base.OnRenderItemText(e);
+            }
+        }
 
         public MainForm(string version) {
             string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -61,8 +104,8 @@ namespace Launcher {
                     StartInfo = {
                         FileName = button.Path,
                         Arguments = button.Arguments,
-                        UseShellExecute = button.Parent.Name == "adminPage",
-                        Verb = button.Parent.Name == "adminPage" ? "runas" : ""
+                        UseShellExecute = target.Extension != ".exe",
+                        Verb = ""
                     }
                 };
          
@@ -116,16 +159,23 @@ namespace Launcher {
             if (_buttons.Select(b => b.GridLocation).Count() >
                 _buttons.Select(b => b.GridLocation).Distinct().Count()) {
                 MessageBox.Show(
-                    "JSON entries are in an inconsistant state.  Grid locations will be reset, and size recalculated.");
+                    Resources.JSONError);
                 foreach (LauncherButton button in _buttons)
                     button.GridLocation = new Point(0, 0);
                 _buttons.Validate(true);
             } else 
                 _buttons.Validate();
             InitializeComponent();
+            if (Program.UsingDarkMode) {
+                UseImmersiveDarkMode(Handle, true);
+                Icon = Properties.Resources.white_rocket;
+                menuStrip1.Renderer = new DarkRenderer();
+                RightClickMenu.Renderer = new DarkRenderer();
+                Invalidate();
+            }
             DrawButtons();
             _version = version;
-            Text = $"Launcher - {_version}";
+            Text = string.Format(Resources.DefaultMainTitle, _version);
         }
 
         public sealed override string Text {
@@ -136,9 +186,11 @@ namespace Launcher {
         private void DrawButtons(bool redraw = false) {
             SuspendLayout();
             if (redraw) {
-                while (Controls.OfType<LauncherButton>().Count() > 0) {
+                while (Controls.OfType<LauncherButton>().Any()) {
                     foreach (LauncherButton button in Controls.OfType<LauncherButton>()) {
-                        Controls.Remove(Controls.Find(button.Name, true).LastOrDefault());
+                        if (Controls.Find(button.Name, true).Last() is null)
+                            continue;
+                        Controls.Remove(Controls.Find(button.Name, true).Last());
                     }
                 }
             }
@@ -181,6 +233,21 @@ namespace Launcher {
             createOrEditButton.ShowDialog();
             if (createOrEditButton.DialogResult == DialogResult.Cancel)
                 return;
+
+            if (string.IsNullOrEmpty(createOrEditButton.Caption))
+                return;
+            Debug.WriteLine("Click event " + button.Text);
+            if (string.IsNullOrEmpty(createOrEditButton.Path))
+                return;
+            FileInfo target = new FileInfo(createOrEditButton.Path);
+            if (target.Extension == ".ps1") {
+                button.Arguments = $@"-File ""{createOrEditButton.Path}"" -ExecutionPolicy Bypass";
+                button.Path = "powershell.exe";
+            } else if (target.Extension == ".msc") {
+                button.Arguments = $@"""{createOrEditButton.Path}""";
+                button.Path = @"C:\Windows\System32\mmc.exe";
+            }
+
             button.Caption = createOrEditButton.Caption;
             button.Path = createOrEditButton.Path;
             button.Arguments = createOrEditButton.Arguments;
@@ -253,12 +320,12 @@ namespace Launcher {
 
         private void RearrangeMenu_Click(object sender, EventArgs e) {
             if (_rearrangeMode) {
-                Text = $"Launcher - {_version}";
+                Text = string.Format(Resources.DefaultMainTitle, _version);
                 foreach (LauncherButton button in Controls.OfType<LauncherButton>()) {
                     button.MouseDown -= _mouseDown;
                 }
             } else {
-                Text = $"Launcher - {_version} - Rearrange Mode";
+                Text = string.Format(Resources.RearrangeMainTitle, _version);
                 foreach (LauncherButton button in Controls.OfType<LauncherButton>()) {
                     button.MouseDown += _mouseDown;
                 }
@@ -308,6 +375,17 @@ namespace Launcher {
 
         private void ExitMenu_Click(object sender, EventArgs e) {
             Close();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e) {
+            if (Program.UsingDarkMode) {
+                BackColor = SystemColors.ControlDarkDark;
+                menuStrip1.BackColor = SystemColors.ControlDarkDark;
+                menuStrip1.ForeColor = Color.GhostWhite;
+                RightClickMenu.BackColor = SystemColors.ControlDarkDark;
+                RightClickMenu.ForeColor = Color.GhostWhite;
+                Invalidate();
+            }
         }
     }
 }
