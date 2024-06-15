@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using Launcher.Properties;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using System.Management;
+using System.Text.RegularExpressions;
 
 namespace Launcher {
     public partial class MainForm : Form {
@@ -31,7 +33,7 @@ namespace Launcher {
         private LauncherButton _dragSource;
         private readonly string _version;
 
-        [System.Runtime.InteropServices.DllImport("Kernel32.Dll", EntryPoint = "Wow64EnableWow64FsRedirection")]
+        [DllImport("Kernel32.Dll", EntryPoint = "Wow64EnableWow64FsRedirection")]
         public static extern bool EnableWow64FSRedirection(bool enable);
 
         [DllImport("dwmapi.dll")]
@@ -92,23 +94,52 @@ namespace Launcher {
                 Debug.WriteLine("Click event " + button.Text);
                 if (string.IsNullOrEmpty(button.Path))
                     return;
-                FileInfo target = new FileInfo(button.Path);
-                if (target.Extension == ".ps1") {
-                    button.Arguments = $@"-File ""{button.Path}"" -ExecutionPolicy Bypass";
-                    button.Path = "powershell.exe";
-                } else if (target.Extension == ".msc") {
-                    button.Arguments = $@"""{button.Path}""";
-                    button.Path = @"C:\Windows\System32\mmc.exe";
-                }
-                Process process = new Process {
-                    StartInfo = {
-                        FileName = button.Path,
-                        Arguments = button.Arguments,
-                        UseShellExecute = target.Extension != ".exe",
-                        Verb = ""
+                FileInfo target = new FileInfo(@"C:\");
+                if (button.Path != "microsoft-edge:") {
+                    target = new FileInfo(button.Path);
+                    if (target.Extension == ".ps1") {
+                        button.Arguments = $@"-File ""{button.Path}"" -ExecutionPolicy Bypass";
+                        button.Path = "powershell.exe";
+                    } else if (target.Extension == ".msc") {
+                        button.Arguments = $@"""{button.Path}""";
+                        button.Path = @"C:\Windows\System32\mmc.exe";
                     }
-                };
-         
+                }
+                Process process;
+                if (button.AdminOnly) {
+                    process = new Process {
+                        StartInfo = {
+                            FileName = button.Path,
+                            Arguments = button.Arguments,
+                            UseShellExecute = true,
+                            Verb = "runas"
+                        }
+                    };
+                } else if (IsDirectory(button.Path)) {
+                    process = new Process {
+                        StartInfo = {
+                            FileName = NormalizePath(button.Path),
+                            UseShellExecute = true,
+                            Verb = "open"
+                        }
+                    };
+                } else if (button.Path == "microsoft-edge:") {
+                    process = new Process{
+                        StartInfo = {
+                            FileName = $@"{button.Path}{button.Arguments}"
+                        }
+                    };
+                } else {
+                    process = new Process {
+                        StartInfo = {
+                            FileName = button.Path,
+                            Arguments = button.Arguments,
+                            UseShellExecute = target.Extension != ".exe",
+                            Verb = ""
+                        }
+                    };
+                }
+
                 try {
                     process.Start();
                 } catch (System.ComponentModel.Win32Exception) {
@@ -147,10 +178,18 @@ namespace Launcher {
                 destinationButton.Caption = _dragSource.Caption;
                 destinationButton.Path = _dragSource.Path;
                 destinationButton.Arguments = _dragSource.Arguments;
+                destinationButton.Background = _dragSource.Background;
+                destinationButton.BackColor = _dragSource.BackColor;
+                destinationButton.ForeColor = _dragSource.ForeColor;
+                destinationButton.ReferenceType = _dragSource.ReferenceType;
 
                 _dragSource.Caption = copyOfDestination.Caption;
                 _dragSource.Path = copyOfDestination.Path;
                 _dragSource.Arguments = copyOfDestination.Arguments;
+                _dragSource.Background = copyOfDestination.Background;
+                _dragSource.BackColor = copyOfDestination.BackColor;
+                _dragSource.ForeColor = copyOfDestination.ForeColor;
+                _dragSource.ReferenceType = copyOfDestination.ReferenceType;
                 _dragSource = null;
                 RefreshCollection();
             };
@@ -168,7 +207,7 @@ namespace Launcher {
             InitializeComponent();
             if (Program.UsingDarkMode) {
                 UseImmersiveDarkMode(Handle, true);
-                Icon = Properties.Resources.white_rocket;
+                Icon = Resources.white_rocket;
                 menuStrip1.Renderer = new DarkRenderer();
                 RightClickMenu.Renderer = new DarkRenderer();
                 Invalidate();
@@ -229,7 +268,8 @@ namespace Launcher {
             ContextMenuStrip strip = item?.GetCurrentParent() as ContextMenuStrip;
             if (!(strip?.SourceControl is LauncherButton button))
                 return;
-            CreateOrEditButton createOrEditButton = new CreateOrEditButton(button.Path, button.Caption, button.Arguments);
+            button.ReferenceType = LauncherButton.DetermineType(button);
+            CreateOrEditButton createOrEditButton = new CreateOrEditButton(button);
             createOrEditButton.ShowDialog();
             if (createOrEditButton.DialogResult == DialogResult.Cancel)
                 return;
@@ -237,20 +277,60 @@ namespace Launcher {
             if (string.IsNullOrEmpty(createOrEditButton.Caption))
                 return;
             Debug.WriteLine("Click event " + button.Text);
-            if (string.IsNullOrEmpty(createOrEditButton.Path))
+            if (string.IsNullOrEmpty(createOrEditButton.Path) && !IsDirectory(createOrEditButton.Arguments))
                 return;
-            FileInfo target = new FileInfo(createOrEditButton.Path);
-            if (target.Extension == ".ps1") {
-                button.Arguments = $@"-File ""{createOrEditButton.Path}"" -ExecutionPolicy Bypass";
-                button.Path = "powershell.exe";
-            } else if (target.Extension == ".msc") {
-                button.Arguments = $@"""{createOrEditButton.Path}""";
-                button.Path = @"C:\Windows\System32\mmc.exe";
+            if (createOrEditButton.ReferenceType != LauncherButton.RefType.Undetermined) {
+                button.Path = createOrEditButton.Path;
+                button.Caption = createOrEditButton.Caption;
+                button.Arguments = createOrEditButton.Arguments;
+                button.AdminOnly = createOrEditButton.AdminOnly;
+                button.Background = createOrEditButton.Back;
+                button.BackColor = button.Background;
+                button.ReferenceType = createOrEditButton.ReferenceType;
+                button.ColorCheck();
+                return;
             }
-
-            button.Caption = createOrEditButton.Caption;
-            button.Path = createOrEditButton.Path;
-            button.Arguments = createOrEditButton.Arguments;
+            if (string.IsNullOrEmpty(createOrEditButton.Path) && IsDirectory(createOrEditButton.Arguments)) {
+                createOrEditButton.Path = createOrEditButton.Arguments;
+                createOrEditButton.Arguments = null;
+            }
+            try {
+                Path.GetFullPath(createOrEditButton.Path);
+            } catch {
+                return;
+            }
+            try {
+                createOrEditButton.Path = NormalizePath(createOrEditButton.Path);
+                FileAttributes fileAttributes = File.GetAttributes(createOrEditButton.Path);
+                if (fileAttributes.HasFlag(FileAttributes.Directory)) {
+                    button.Path = createOrEditButton.Path;
+                    button.Arguments = null;
+                    button.ReferenceType = LauncherButton.RefType.Folder;
+                } else {
+                    FileInfo target = new FileInfo(createOrEditButton.Path);
+                    if (target.Extension == ".ps1") {
+                        button.Arguments = $@"-File ""{createOrEditButton.Path}"" -ExecutionPolicy Bypass";
+                        button.Path = @"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe";
+                        button.ReferenceType = LauncherButton.RefType.Powershell;
+                    } else if (target.Extension == ".msc") {
+                        button.Arguments = $@"""{createOrEditButton.Path}""";
+                        button.Path = @"C:\Windows\System32\mmc.exe";
+                    } else {
+                        button.Path = createOrEditButton.Path;
+                        button.Arguments = createOrEditButton.Arguments;
+                    }
+                }
+                button.Caption = createOrEditButton.Caption;
+                button.AdminOnly = createOrEditButton.AdminOnly;
+                button.Background = createOrEditButton.Back;
+                button.BackColor = button.Background;
+            } catch {
+                button.Caption = "";
+                button.Path = "";
+                button.Arguments = "";
+                button.Background = button.DefaultBack;
+                button.ColorCheck();
+            }
             RefreshCollection();
         }
 
@@ -268,7 +348,29 @@ namespace Launcher {
                         )
                 );
         }
-
+        private bool IsDirectory(string path) {
+            if (path == "microsoft-edge:")
+                return false;
+            FileAttributes fileAttributes = File.GetAttributes(path);
+            return fileAttributes.HasFlag(FileAttributes.Directory);
+        }
+        private string GetUncFromDriveLetter(string path) {
+            if (path.First() == '\\' || Uri.IsWellFormedUriString(path, UriKind.Absolute))
+                return path;
+            string driveLetter = Directory.GetDirectoryRoot(path)
+                .Replace(Path.DirectorySeparatorChar.ToString(), "");
+            using (ManagementObject managementObject = new ManagementObject()) {
+                managementObject.Path = new ManagementPath($@"\\{Environment.MachineName}\root\cimv2:Win32_LogicalDisk.DeviceID=""{driveLetter}""");
+                return $@"{Convert.ToString(managementObject["ProviderName"])}\";
+            }
+        }
+        private string NormalizePath(string path) {
+            if (!Regex.IsMatch(path, @"\\\\.*"))
+                path = path.Replace(Directory.GetDirectoryRoot(path), GetUncFromDriveLetter(path));
+            if (IsDirectory(path) && path.Last() != Path.DirectorySeparatorChar)
+                path += Path.DirectorySeparatorChar;
+            return path;
+        }
         private void ClearToolStripMenuItem_Click(object sender, EventArgs e) {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             ContextMenuStrip strip = item?.GetCurrentParent() as ContextMenuStrip;
@@ -277,10 +379,10 @@ namespace Launcher {
             button.Caption = "";
             button.Path = "";
             button.Arguments = "";
+            button.Background = button.DefaultBack;
             button.ColorCheck();
             RefreshCollection();
         }
-
         private void RunAsToolStripMenuItem_Click(object sender, EventArgs e) {
             EnableWow64FSRedirection(false);
             ToolStripMenuItem item = sender as ToolStripMenuItem;

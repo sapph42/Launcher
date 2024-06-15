@@ -19,10 +19,10 @@ namespace Launcher.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Launcher.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Launcher.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Launcher.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,20 +63,88 @@ namespace Launcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Confirm {
+        public static System.Drawing.Bitmap Add {
             get {
-                object obj = ResourceManager.GetObject("Confirm", resourceCulture);
+                object obj = ResourceManager.GetObject("Add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \\eamcfs01\dept$\_EAMC_DATA\workgroup\IMD\System Administration\_AdminApps\Launcher\.
+        /// </summary>
+        public static string CanonicalLocation {
+            get {
+                return ResourceManager.GetString("CanonicalLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launcher - {0}.
+        /// </summary>
+        public static string DefaultMainTitle {
+            get {
+                return ResourceManager.GetString("DefaultMainTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to JSON entries are in an inconsistant state.  Grid locations will be reset, and size recalculated..
+        /// </summary>
+        public static string JSONError {
+            get {
+                return ResourceManager.GetString("JSONError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launcher - {0} - Rearrange Mode.
+        /// </summary>
+        public static string RearrangeMainTitle {
+            get {
+                return ResourceManager.GetString("RearrangeMainTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SwapIcon {
+        public static System.Drawing.Bitmap Remove {
             get {
-                object obj = ResourceManager.GetObject("SwapIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Remove", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon rocket {
+            get {
+                object obj = ResourceManager.GetObject("rocket", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currently running: {0} 
+        ///Canonical version: {1}
+        ///Update in progress.
+        ///Program will restart..
+        /// </summary>
+        public static string UpdateNotice {
+            get {
+                return ResourceManager.GetString("UpdateNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon white_rocket {
+            get {
+                object obj = ResourceManager.GetObject("white_rocket", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }
