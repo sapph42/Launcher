@@ -488,6 +488,13 @@ namespace Launcher {
                 RightClickMenu.ForeColor = Color.GhostWhite;
                 Invalidate();
             }
+            Random random = new Random();
+            int roll = random.Next(20) + 1;
+            Text += $" - {roll}";
+            if (roll == 20) {
+                Dread dread = new Dread();
+                dread.ShowDialog();
+            }            
         }
     }
 }
