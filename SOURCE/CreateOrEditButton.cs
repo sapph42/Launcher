@@ -19,6 +19,7 @@ namespace Launcher {
         public bool AdminOnly;
         public Color Back;
         public LauncherButton.RefType ReferenceType;
+        public LauncherButton.Browser TargetBrowser;
         public new DialogResult DialogResult = DialogResult.None;
 
         public CreateOrEditButton() : this("", "", default, "", false) { }
@@ -38,6 +39,7 @@ namespace Launcher {
             AdminOnly = button.AdminOnly;
             Back = button.Background;
             ReferenceType = button.ReferenceType;
+            TargetBrowser = button.TargetBrowser;
             InitializeComponent();
         }
 
@@ -53,6 +55,34 @@ namespace Launcher {
                     break;
                 case LauncherButton.RefType.Webpage:
                     UriCaptionTextBox.Text = Caption ?? "";
+                    UriColorButton.BackColor = Back;
+                    TabControl.SelectedTab = WebTab;
+                    bool typeChecked;
+                    if (TargetBrowser != LauncherButton.Browser.None) {
+                        typeChecked = true;
+                        switch (TargetBrowser) {
+                            case LauncherButton.Browser.Edge:
+                                EdgeRadio.Checked = true;
+                                break;
+                            case LauncherButton.Browser.Chrome:
+                                ChromeRadio.Checked = true;
+                                break;
+                            case LauncherButton.Browser.Firefox:
+                                FirefoxRadio.Checked = true;
+                                break;
+                            default:
+                                typeChecked = false;
+                                break;
+                        }
+                        if (typeChecked) {
+                            if (LauncherButton.BrowserPaths.Values.Contains(Path)) {
+                                UriTargetTextBox.Text = Arguments;
+                            } else {
+                                UriTargetTextBox.Text = Path;
+                            }
+                            break; 
+                        }
+                    }
                     if (string.IsNullOrEmpty(Path)) {
                         UriTargetTextBox.Text = "";
                         EdgeRadio.Checked = true;
@@ -76,8 +106,6 @@ namespace Launcher {
                             break;
                     }
                     UriTargetTextBox.Text = Arguments ?? "";
-                    UriColorButton.BackColor = Back;
-                    TabControl.SelectedTab = WebTab;
                     break;
                 case LauncherButton.RefType.Powershell:
                     FileInfo PathInfo = new FileInfo(Path);
@@ -186,14 +214,15 @@ namespace Launcher {
         }
         private void UriOkButton_Click(object sender, EventArgs e) {
             Caption = UriCaptionTextBox.Text;
-            Arguments = UriTargetTextBox.Text;
+            Arguments = "";
             if (EdgeRadio.Checked) {
-                Path = "microsoft-edge:";
+                TargetBrowser = LauncherButton.Browser.Edge;
             } else if (FirefoxRadio.Checked) {
-                Path = @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe";
+                TargetBrowser = LauncherButton.Browser.Firefox;
             } else {
-                Path = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe";
+                TargetBrowser = LauncherButton.Browser.Chrome;
             }
+            Path = UriTargetTextBox.Text;
             AdminOnly = false;
             DialogResult = DialogResult.OK;
             Back = UriColorButton.BackColor;
@@ -202,12 +231,12 @@ namespace Launcher {
         }
         private void PowerShellOkButton_Click(object sender, EventArgs e) {
             Caption = ProgramCaptionTextBox.Text;
-            Arguments = $@"-File ""{PowerShellTargetTextBox.Text}"" {ProgramArgumentsTextBox.Text}";
-            Path = @"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe";
+            Arguments = ProgramArgumentsTextBox.Text;
+            Path = PowerShellTargetTextBox.Text;
             AdminOnly = ProgramAdminCheck.Checked;
             DialogResult = DialogResult.OK;
             Back = ProgramColorButton.BackColor;
-            ReferenceType = LauncherButton.RefType.Program;
+            ReferenceType = LauncherButton.RefType.Powershell;
             Close();
         }
         private void CancelButton_Click(object sender, EventArgs e) {

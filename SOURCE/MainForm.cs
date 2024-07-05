@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -7,15 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Launcher.Properties;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using System.Management;
 using System.Text.RegularExpressions;
 
 namespace Launcher {
     public partial class MainForm : Form {
-        //private Dictionary<string, string> buttons = new Dictionary<string, string>();
-
         private const int ButtonWidth = 94;
         private const int ButtonHeight = 52;
         private const int ButtonBuffer = 6;
@@ -95,51 +92,79 @@ namespace Launcher {
                 if (string.IsNullOrEmpty(button.Path))
                     return;
                 FileInfo target = new FileInfo(@"C:\");
-                if (button.Path != "microsoft-edge:") {
-                    target = new FileInfo(button.Path);
-                    if (target.Extension == ".ps1") {
-                        button.Arguments = $@"-File ""{button.Path}"" -ExecutionPolicy Bypass";
-                        button.Path = "powershell.exe";
-                    } else if (target.Extension == ".msc") {
-                        button.Arguments = $@"""{button.Path}""";
-                        button.Path = @"C:\Windows\System32\mmc.exe";
-                    }
-                }
+                string filename = "";
+                string arguments = "";
                 Process process;
-                if (button.AdminOnly) {
-                    process = new Process {
-                        StartInfo = {
-                            FileName = button.Path,
-                            Arguments = button.Arguments,
-                            UseShellExecute = true,
-                            Verb = "runas"
+                if (button.ReferenceType == LauncherButton.RefType.Undetermined)
+                    button.ReferenceType = LauncherButton.DetermineType(button);
+                switch (button.ReferenceType) {
+                    case LauncherButton.RefType.Folder:
+                        process = new Process {
+                            StartInfo = {
+                                    FileName = NormalizePath(button.Path),
+                                    UseShellExecute = true,
+                                    Verb = "open"
+                                }
+                        };
+                        break;
+                    case LauncherButton.RefType.Webpage:
+                        if (LauncherButton.BrowserPaths.Values.Contains(button.Path)) {
+                            filename = button.Path;
+                            arguments = button.Arguments;
+                        } else {
+                            filename = LauncherButton.BrowserPaths[button.TargetBrowser];
+                            arguments = button.Path;
                         }
-                    };
-                } else if (IsDirectory(button.Path)) {
-                    process = new Process {
-                        StartInfo = {
-                            FileName = NormalizePath(button.Path),
-                            UseShellExecute = true,
-                            Verb = "open"
+                        button.TargetBrowser = LauncherButton.GetBrowser(button);
+                        if (button.TargetBrowser == LauncherButton.Browser.Edge) {
+                            process = new Process {
+                                    StartInfo = {
+                                    FileName = $@"{filename}{arguments}"
+                                }
+                            };
+                        } else {
+                            process = new Process {
+                                StartInfo = {
+                                FileName = filename,
+                                Arguments = arguments,
+                                UseShellExecute = false,
+                                Verb = ""
+                            }
+                            };
                         }
-                    };
-                } else if (button.Path == "microsoft-edge:") {
-                    process = new Process{
-                        StartInfo = {
-                            FileName = $@"{button.Path}{button.Arguments}"
+                        break;
+                    case LauncherButton.RefType.Powershell:
+                        target = new FileInfo(button.Path);
+                        if (target.Extension == ".ps1") {
+                            arguments = $@"-File ""{button.Path}"" -ExecutionPolicy Bypass";
+                            filename = "powershell.exe";
+                        } else {
+                            filename = button.Path;
+                            arguments = button.Arguments;
                         }
-                    };
-                } else {
-                    process = new Process {
-                        StartInfo = {
-                            FileName = button.Path,
-                            Arguments = button.Arguments,
-                            UseShellExecute = target.Extension != ".exe",
-                            Verb = ""
-                        }
-                    };
-                }
+                        process = new Process {
+                            StartInfo = {
+                                FileName = button.Path,
+                                Arguments = button.Arguments,
+                                UseShellExecute = button.AdminOnly,
+                                Verb = button.AdminOnly ? "runas" : ""
+                            }
+                        };
+                        break;
+                    case LauncherButton.RefType.Program:
+                    default:
+                        process = new Process {
+                            StartInfo = {
+                                FileName = button.Path,
+                                Arguments = button.Arguments,
+                                UseShellExecute = target.Extension != ".exe" || button.AdminOnly,
+                                Verb = button.AdminOnly ? "runas" : ""
+                            }
+                        };
+                        break;
 
+                }
+ 
                 try {
                     process.Start();
                 } catch (System.ComponentModel.Win32Exception) {
@@ -259,7 +284,13 @@ namespace Launcher {
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             RefreshCollection();
             string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string jsonString = JsonConvert.SerializeObject(Controls.OfType<LauncherButton>(), Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(
+                Controls
+                    .OfType<LauncherButton>()
+                    .Where(lb => lb.Caption != "" && lb.Path != "")
+                    .OrderBy(lb => lb.GridLocation.Y)
+                    .ThenBy(lb => lb.GridLocation.X), 
+                Formatting.Indented);
             File.WriteAllText($@"{path}\launcher.json", jsonString);
         }
 
@@ -268,7 +299,9 @@ namespace Launcher {
             ContextMenuStrip strip = item?.GetCurrentParent() as ContextMenuStrip;
             if (!(strip?.SourceControl is LauncherButton button))
                 return;
-            button.ReferenceType = LauncherButton.DetermineType(button);
+            button.DetermineType();
+            if (button.ReferenceType == LauncherButton.RefType.Webpage && button.TargetBrowser == LauncherButton.Browser.None)
+                button.TargetBrowser = LauncherButton.GetBrowser(button);
             CreateOrEditButton createOrEditButton = new CreateOrEditButton(button);
             createOrEditButton.ShowDialog();
             if (createOrEditButton.DialogResult == DialogResult.Cancel)
@@ -336,17 +369,14 @@ namespace Launcher {
 
         private void RefreshCollection() {
             _buttons.Clear();
-            _buttons
-                .AddRange(
-                    JsonConvert
-                        .DeserializeObject<HashSet<LauncherButton>>(
-                            JsonConvert
-                                .SerializeObject(
-                                    Controls.OfType<LauncherButton>(),
-                                    Formatting.Indented
-                                )
-                        )
-                );
+            _buttons.AddRange(
+                JsonConvert.DeserializeObject<HashSet<LauncherButton>>(
+                    JsonConvert.SerializeObject(
+                        Controls.OfType<LauncherButton>(),
+                        Formatting.Indented
+                    )
+                )
+            );
         }
         private bool IsDirectory(string path) {
             if (path == "microsoft-edge:")
@@ -494,7 +524,7 @@ namespace Launcher {
             if (roll == 20) {
                 Dread dread = new Dread();
                 dread.ShowDialog();
-            }            
+            }
         }
     }
 }

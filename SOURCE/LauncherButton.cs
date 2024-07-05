@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace Launcher {
     [JsonObject(MemberSerialization.OptIn)]
@@ -19,7 +21,6 @@ namespace Launcher {
         private readonly Color _bomgarOrange = Color.FromArgb(255, 85, 0);
         private readonly Color _edgeGreen = Color.FromArgb(69, 210, 154);
         private readonly Color _firefoxOrange = Color.FromArgb(255, 146, 29);
-        private readonly Color _defaultFore;
         private readonly Color _lightFore = Color.GhostWhite;
         private readonly Color _darkFore = SystemColors.ControlText;
 
@@ -30,6 +31,20 @@ namespace Launcher {
             Webpage,
             Powershell
         }
+
+        public enum Browser {
+            None,
+            Edge,
+            Firefox,
+            Chrome
+        }
+
+        public static Dictionary<Browser, string> BrowserPaths = new Dictionary<Browser, string> {
+            { Browser.None, null },
+            { Browser.Edge, "microsoft-edge:" }, 
+            { Browser.Firefox, @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe" },
+            { Browser.Chrome, @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" }
+        };
 
         public Color DefaultBack { get; }
         [JsonProperty]
@@ -43,6 +58,7 @@ namespace Launcher {
         [JsonProperty] public bool AdminOnly { get; set; } = false;
         [JsonProperty] public Color Background { get; set; } = SystemColors.Control;
         [JsonProperty] public RefType ReferenceType { get; set; }
+        [JsonProperty] public Browser TargetBrowser { get; set; }
         
         public LauncherButton() : this("", "", new Point()) { }
 
@@ -54,24 +70,27 @@ namespace Launcher {
             string arguments = "", 
             bool adminOnly = false, 
             Color? background = null,
-            RefType refType = RefType.Undetermined
+            RefType refType = RefType.Undetermined,
+            Browser browserTarget = Browser.None
         ) {
             Caption = caption;
             Path = path;
             Arguments = arguments;
             GridLocation = grid;
             AdminOnly = adminOnly;
-            if (refType == RefType.Undetermined)
-                DetermineType();
+            ReferenceType = refType;
+            if (ReferenceType == RefType.Webpage && TargetBrowser == Browser.None)
+                TargetBrowser = Browser.Edge;
+            else
+                TargetBrowser = browserTarget;
+            NormalizeFields();
             InitializeComponent();
             if (Program.UsingDarkMode) {
                 DefaultBack = SystemColors.ControlDarkDark;
-                _defaultFore = _lightFore;
                 FlatStyle = FlatStyle.Flat;
             }
             else {
                 DefaultBack = SystemColors.Control;
-                _defaultFore = _darkFore;
                 FlatStyle = FlatStyle.Standard;
             }
             Background = background ?? DefaultBack;
@@ -84,7 +103,6 @@ namespace Launcher {
             base.OnBackColorChanged(e);
             SetForeColor();
         }
-
         public object this[string propertyName] {
             get {
                 Type myType = typeof(LauncherButton);
@@ -155,45 +173,10 @@ namespace Launcher {
             SetForeColor();
         }
         public static RefType DetermineType(LauncherButton button) {
-            try {
-                try {
-                    if (string.IsNullOrEmpty(button.Path)) {
-                        button.Path = button.Arguments;
-                        button.Arguments = null;
-                    }
-                    FileAttributes fileAttributes = File.GetAttributes(button.Path);
-                    if (fileAttributes.HasFlag(FileAttributes.Directory))
-                        return RefType.Folder;
-                    else {
-                        FileInfo fileInfo = new FileInfo(button.Path);
-                        if (fileInfo.Extension == ".exe" && !Regex.IsMatch(button.Arguments, @"(?<startargs>.*)(?:-File\s)""?(?<path>[^""]*)""?\s(?<endargs>.*)"))
-                            return RefType.Program;
-                        else if (
-                            fileInfo.Extension == ".ps1" || (
-                                fileInfo.Name == "powershell.exe" && 
-                                Regex.IsMatch(button.Arguments, @"(?<startargs>.*)(?:-File\s)""?(?<path>[^""]*)""?\s(?<endargs>.*)")
-                            )
-                        )
-                            return RefType.Powershell;
-                        return RefType.Undetermined;
-                    }
-                } catch { //NOT A FILE OR DIRECTORY
-                    try {
-                        if (Uri.IsWellFormedUriString(button.Path, UriKind.Absolute)) {
-                            Uri uri = new Uri(button.Path);
-                            if (uri.HostNameType == UriHostNameType.Dns && !uri.IsUnc)
-                                return RefType.Webpage;
-                        }
-                        return RefType.Undetermined;
-                    } catch {
-                        return RefType.Undetermined;
-                    }
-                }
-            } catch {
-                return RefType.Undetermined;
-            }
+            button.DetermineType();
+            return button.ReferenceType;
         }
-        private void DetermineType() {
+        public void DetermineType() {
             try {
                 try {
                     FileAttributes fileAttributes = File.GetAttributes(Path);
@@ -201,7 +184,9 @@ namespace Launcher {
                         ReferenceType = RefType.Folder;
                     else {
                         FileInfo fileInfo = new FileInfo(Path);
-                        if (fileInfo.Extension == ".exe")
+                        if (BrowserPaths.Values.Contains(fileInfo.FullName))
+                            ReferenceType = RefType.Webpage;
+                        else if (fileInfo.Extension == ".exe") 
                             ReferenceType = RefType.Program;
                         else if (fileInfo.Extension == ".ps1")
                             ReferenceType = RefType.Powershell;
@@ -209,6 +194,12 @@ namespace Launcher {
                             ReferenceType = RefType.Undetermined;
                     }
                 } catch { //NOT A FILE OR DIRECTORY
+                    if (Path == "powershell.exe" && !string.IsNullOrEmpty(Arguments)) {
+                        ReferenceType = RefType.Powershell;
+                        return;
+                    } else if (Path == "microsoft-edge:") {
+                        ReferenceType = RefType.Webpage;
+                    }
                     try {
                         if (Uri.IsWellFormedUriString(Path, UriKind.Absolute)) {
                             Uri uri = new Uri(Path);
@@ -223,6 +214,110 @@ namespace Launcher {
             } catch {
                 ReferenceType = RefType.Undetermined;
             }
+        }
+        public static Browser GetBrowser(LauncherButton button) {
+            switch (button.Path) {
+                case var PathVal when new Regex(@".*\\firefox\.exe").IsMatch(PathVal):
+                    return Browser.Firefox;
+                case var PathVal when new Regex(@".*\\chrome\.exe").IsMatch(PathVal):
+                    return Browser.Chrome;
+                case "microsoft-edge:":
+                    return Browser.Edge;
+                default:
+                    return Browser.None;
+            }
+        }
+        private void SetBrowser() {
+            if (Uri.TryCreate(Path, UriKind.Absolute, out _)) {
+                if (TargetBrowser == Browser.None)
+                    TargetBrowser = Browser.Edge;
+            } else { 
+                switch (Path) {
+                    case var PathVal when new Regex(@".*\\firefox\.exe").IsMatch(PathVal):
+                        TargetBrowser = Browser.Firefox;
+                        break;
+                    case var PathVal when new Regex(@".*\\chrome\.exe").IsMatch(PathVal):
+                        TargetBrowser = Browser.Chrome;
+                        break;
+                    case "microsoft-edge:":
+                    default:
+                        TargetBrowser = Browser.Edge;
+                        break;
+                }
+            }
+        }
+        public static string[] ExtractPSPathFromArgument(string argument) {
+            Regex QuotedArgumentParser = new Regex(@"(?<startargs>.*)(?:-File\s)""(?<path>[^""]*)""\s(?<endargs>.*)");
+            Regex UnquotedArgumentParser = new Regex(@"(?<startargs>.*)(?:-File\s)(?<path>[^"" ]*)\s(?<endargs>.*)");
+            MatchCollection matches;
+            string[] arguments = new string[2];
+            if (QuotedArgumentParser.IsMatch(argument)) {
+                matches = QuotedArgumentParser.Matches(argument);
+                var groups = matches[0].Groups;
+                arguments[0] = groups["path"].Value;
+                if (!string.IsNullOrEmpty(groups["startargs"].Value)
+                    && !string.IsNullOrEmpty(groups["endargs"].Value)) {
+                    arguments[1] = $"{groups["startargs"].Value} {groups["endargs"].Value}";
+                } else
+                    arguments[1] = groups["startargs"].Value + groups["endargs"].Value;
+            } else if (UnquotedArgumentParser.IsMatch(argument)) {
+                matches = UnquotedArgumentParser.Matches(argument);
+                var groups = matches[0].Groups;
+                arguments[0] = groups["path"].Value;
+                if (!string.IsNullOrEmpty(groups["startargs"].Value)
+                    && !string.IsNullOrEmpty(groups["endargs"].Value)) {
+                    arguments[1] = $"{groups["startargs"].Value} {groups["endargs"].Value}";
+                } else
+                    arguments[1] = groups["startargs"].Value ?? groups["endargs"].Value;
+            } else {
+                arguments[0] = "";
+                arguments[1] = argument;
+            }
+            return arguments;
+        }
+        public void NormalizeFields() {
+            DetermineType();
+            switch (ReferenceType) {
+                case RefType.Program:
+                    if (BrowserPaths.Values.Contains(Path) && !string.IsNullOrEmpty(Arguments)) {
+                        ReferenceType = RefType.Webpage;
+                        SetBrowser();
+                        Path = Arguments;
+                        Arguments = "";
+                    }
+                    if (Path == "powershell.exe")
+                        Path = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+                    if (Path == "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" && !string.IsNullOrEmpty(Arguments)) {
+                        var parsed = ExtractPSPathFromArgument(Arguments);
+                        if (!string.IsNullOrEmpty(parsed[0]))
+                            Path = parsed[0];
+                        Arguments = parsed[1];
+                        ReferenceType = RefType.Powershell;
+                    }
+                    break;
+                case RefType.Webpage:
+                    SetBrowser();
+                    if (!string.IsNullOrEmpty(Arguments) && Uri.TryCreate(Arguments, UriKind.Absolute, out _)) {
+                        Path = Arguments;
+                        Arguments = "";
+                    }
+                    break;
+                case RefType.Powershell:
+                    if (Path == "powershell.exe")
+                        Path = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+                    if (Path == "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" && !string.IsNullOrEmpty(Arguments)) {
+                        var parsed = ExtractPSPathFromArgument(Arguments);
+                        if (!string.IsNullOrEmpty(parsed[0]))
+                            Path = parsed[0];
+                        Arguments = parsed[1];
+                    }
+                    break;
+                case RefType.Undetermined:
+                case RefType.Folder:
+                default:
+                    return;
+            }
+
         }
         public void Assimilate(LauncherButton drone) {
             Caption = drone.Caption;
