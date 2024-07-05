@@ -9,7 +9,7 @@ namespace Launcher {
     static class Program {
 
         public static bool UsingDarkMode;
-        private static bool IsHome = Convert.ToBoolean(Properties.Resources.IsHome);
+        private static readonly bool IsHome = Convert.ToBoolean(Properties.Resources.IsHome);
         private static bool DoUpdate(FileInfo file) {
             if (!IsHome)
                 return false;
@@ -45,7 +45,7 @@ namespace Launcher {
                     return DoUpdate(file);
                 if (canonicalVersion.ProductPrivatePart > version.Revision)
                     return DoUpdate(file);
-            } catch (FileNotFoundException e) {
+            } catch (FileNotFoundException) {
                 Debug.WriteLine("Canonical location not available");
             }
             return false;
