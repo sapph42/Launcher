@@ -47,8 +47,10 @@ namespace Launcher {
 
         public void AddRange(IEnumerable<LauncherButton> collection) {
             foreach (LauncherButton button in collection) {
-                if (!this.Any(b => b.Caption==button.Caption && b.Path==button.Path && b.Arguments==button.Arguments))
+                if (!this.Any(b => b.Caption == button.Caption && b.Path == button.Path && b.Arguments == button.Arguments)) {
+                    button.NormalizeFields();
                     _ = base.Add(button);
+                }
             }
             CalcGridSize();
             if (this.Select(bc => bc.GridLocation).Any(p => p.Equals(_default)))
