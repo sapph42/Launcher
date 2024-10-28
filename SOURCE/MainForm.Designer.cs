@@ -31,6 +31,7 @@ namespace Launcher {
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.editLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RearrangeMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +47,10 @@ namespace Launcher {
             this.RemoveRow = new System.Windows.Forms.PictureBox();
             this.RemoveColumn = new System.Windows.Forms.PictureBox();
             this.AddColumn = new System.Windows.Forms.PictureBox();
+            this.copyTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyArgumentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyFullInvocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openTargetFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RightClickMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddRow)).BeginInit();
@@ -59,36 +64,49 @@ namespace Launcher {
             this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runAsToolStripMenuItem,
             this.toolStripSeparator1,
-            this.editToolStripMenuItem,
-            this.clearToolStripMenuItem});
+            this.copyTargetToolStripMenuItem,
+            this.copyArgumentsToolStripMenuItem,
+            this.copyFullInvocationToolStripMenuItem,
+            this.openTargetFolderToolStripMenuItem,
+            this.copyJSONToolStripMenuItem,
+            this.clearToolStripMenuItem,
+            this.editToolStripMenuItem});
             this.RightClickMenu.Name = "RightClickMenu";
-            this.RightClickMenu.Size = new System.Drawing.Size(109, 76);
+            this.RightClickMenu.Size = new System.Drawing.Size(184, 208);
+            this.RightClickMenu.Opening += new System.ComponentModel.CancelEventHandler(this.RightClickMenu_Opening);
             // 
             // runAsToolStripMenuItem
             // 
             this.runAsToolStripMenuItem.Name = "runAsToolStripMenuItem";
-            this.runAsToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
-            this.runAsToolStripMenuItem.Text = "RunAs";
+            this.runAsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.runAsToolStripMenuItem.Text = "Run As";
             this.runAsToolStripMenuItem.Click += new System.EventHandler(this.RunAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(105, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(180, 6);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
-            this.editToolStripMenuItem.Text = "Edit";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.editToolStripMenuItem.Text = "Properties";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.EditToolStripMenuItem_Click);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.ClearToolStripMenuItem_Click);
+            // 
+            // copyJSONToolStripMenuItem
+            // 
+            this.copyJSONToolStripMenuItem.Name = "copyJSONToolStripMenuItem";
+            this.copyJSONToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.copyJSONToolStripMenuItem.Text = "Copy JSON";
+            this.copyJSONToolStripMenuItem.Click += new System.EventHandler(this.CopyJSONToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 
@@ -225,6 +243,34 @@ namespace Launcher {
             this.AddColumn.TabStop = false;
             this.AddColumn.Click += new System.EventHandler(this.DoAddColumn);
             // 
+            // copyTargetToolStripMenuItem
+            // 
+            this.copyTargetToolStripMenuItem.Name = "copyTargetToolStripMenuItem";
+            this.copyTargetToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.copyTargetToolStripMenuItem.Text = "Copy Target";
+            this.copyTargetToolStripMenuItem.Click += new System.EventHandler(this.copyTargetToolStripMenuItem_Click);
+            // 
+            // copyArgumentsToolStripMenuItem
+            // 
+            this.copyArgumentsToolStripMenuItem.Name = "copyArgumentsToolStripMenuItem";
+            this.copyArgumentsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.copyArgumentsToolStripMenuItem.Text = "Copy Arguments";
+            this.copyArgumentsToolStripMenuItem.Click += new System.EventHandler(this.copyArgumentsToolStripMenuItem_Click);
+            // 
+            // copyFullInvocationToolStripMenuItem
+            // 
+            this.copyFullInvocationToolStripMenuItem.Name = "copyFullInvocationToolStripMenuItem";
+            this.copyFullInvocationToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.copyFullInvocationToolStripMenuItem.Text = "Copy Full Invocation";
+            this.copyFullInvocationToolStripMenuItem.Click += new System.EventHandler(this.copyFullInvocationToolStripMenuItem_Click);
+            // 
+            // openTargetFolderToolStripMenuItem
+            // 
+            this.openTargetFolderToolStripMenuItem.Name = "openTargetFolderToolStripMenuItem";
+            this.openTargetFolderToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.openTargetFolderToolStripMenuItem.Text = "Open Target Folder";
+            this.openTargetFolderToolStripMenuItem.Click += new System.EventHandler(this.openTargetFolderToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -274,6 +320,11 @@ namespace Launcher {
         private System.Windows.Forms.PictureBox RemoveRow;
         private System.Windows.Forms.PictureBox RemoveColumn;
         private System.Windows.Forms.PictureBox AddColumn;
+        private System.Windows.Forms.ToolStripMenuItem copyJSONToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyTargetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyArgumentsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyFullInvocationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openTargetFolderToolStripMenuItem;
     }
 }
 

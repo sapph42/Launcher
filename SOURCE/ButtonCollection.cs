@@ -157,8 +157,8 @@ namespace Launcher {
             if (overrideSizeCalc)
                 CalcGridSize();
             else {
-                _width = this.Max(b => b.GridLocation.X);
-                _height = this.Max(b => b.GridLocation.Y);
+                _width = Count == 0 ? 1 : this.Max(b => b.GridLocation.X);
+                _height = Count == 0 ? 1 : this.Max(b => b.GridLocation.Y);
             }
             ArrangeGrid();
             ConstructButtons();

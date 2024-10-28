@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -9,10 +9,8 @@ namespace Launcher {
     static class Program {
 
         public static bool UsingDarkMode;
-        private static readonly bool IsHome = Convert.ToBoolean(Properties.Resources.IsHome);
+
         private static bool DoUpdate(FileInfo file) {
-            if (!IsHome)
-                return false;
             try {
                 string thisExe = file.Name;
                 string thisFolder = file.DirectoryName;
@@ -26,8 +24,6 @@ namespace Launcher {
         }
 
         private static bool CheckForUpdate(Assembly assembly, FileInfo file) {
-            if (!IsHome)
-                return false;
             if (System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName != "med.ds.osd.mil")
                 return false;
             string folder = file.DirectoryName;
@@ -57,27 +53,32 @@ namespace Launcher {
 		[STAThread]
         static void Main() {
             Assembly thisAssembly = Assembly.GetExecutingAssembly();
-            if (IsHome) {
-                FileInfo thisFile = new FileInfo(thisAssembly.Location);
-                string staticExe = thisFile.FullName;
-                string thisFolder = thisFile.DirectoryName;
-                if (!File.Exists($@"{thisFolder}\Microsoft.WindowsAPICodePack.Shell.dll"))
-                    File.Copy($@"{Properties.Resources.CanonicalLocation}Microsoft.WindowsAPICodePack.dll", $@"{thisFolder}\Microsoft.WindowsAPICodePack.dll");
-                if (!File.Exists($@"{thisFolder}\Microsoft.WindowsAPICodePack.Shell.dll"))
-                    File.Copy($@"{Properties.Resources.CanonicalLocation}Microsoft.WindowsAPICodePack.Shell.dll", $@"{thisFolder}\Microsoft.WindowsAPICodePack.Shell.dll");
-                if (FileVersionInfo.GetVersionInfo($@"{Properties.Resources.CanonicalLocation}Newtonsoft.Json.dll").ProductVersion != FileVersionInfo.GetVersionInfo($@"{thisFolder}\Newtonsoft.Json.dll").ProductVersion)
-                    File.Copy($@"{Properties.Resources.CanonicalLocation}Newtonsoft.Json.dll", $@"{thisFolder}\Newtonsoft.Json.dll");
-                if (CheckForUpdate(thisAssembly, thisFile)) {
-                    MessageBox.Show("A new version has been detected.  Program will now restart.");
-                    Process.Start(staticExe);
-                    Application.Exit();
-                    return;
-                }
+            FileInfo thisFile = new FileInfo(thisAssembly.Location);
+            string staticExe = thisFile.FullName;
+            string thisFolder = thisFile.DirectoryName;
+#if EMPTY
+            string jsonFile = thisFolder + @"\launcher.json";
+            File.Delete(jsonFile);
+#endif
+#if LOCAL
+            if (!File.Exists($@"{thisFolder}\Microsoft.WindowsAPICodePack.Shell.dll"))
+                File.Copy($@"{Properties.Resources.CanonicalLocation}Microsoft.WindowsAPICodePack.dll", $@"{thisFolder}\Microsoft.WindowsAPICodePack.dll");
+            if (!File.Exists($@"{thisFolder}\Microsoft.WindowsAPICodePack.Shell.dll"))
+                File.Copy($@"{Properties.Resources.CanonicalLocation}Microsoft.WindowsAPICodePack.Shell.dll", $@"{thisFolder}\Microsoft.WindowsAPICodePack.Shell.dll");
+            if (FileVersionInfo.GetVersionInfo($@"{Properties.Resources.CanonicalLocation}Newtonsoft.Json.dll").ProductVersion != FileVersionInfo.GetVersionInfo($@"{thisFolder}\Newtonsoft.Json.dll").ProductVersion)
+                File.Copy($@"{Properties.Resources.CanonicalLocation}Newtonsoft.Json.dll", $@"{thisFolder}\Newtonsoft.Json.dll");
+            if (CheckForUpdate(thisAssembly, thisFile)) {
+                MessageBox.Show("A new version has been detected.  Program will now restart.");
+                Process.Start(staticExe);
+                Application.Exit();
+                return;
             }
+#endif
+
             using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
                        @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize")) {
                 var registryValueObject = key?.GetValue("AppsUseLightTheme");
-                UsingDarkMode = registryValueObject != null && (int)registryValueObject == 0;
+                UsingDarkMode = (int?)registryValueObject == 0;
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

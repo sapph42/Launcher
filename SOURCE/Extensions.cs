@@ -54,5 +54,13 @@ namespace Launcher {
                 return (color1.GetRelativeLuminance() + 0.05) / (color2.GetRelativeLuminance() + 0.05);
             return (color2.GetRelativeLuminance() + 0.05) / (color1.GetRelativeLuminance() + 0.05);
         }
+
+        public static IEnumerable<T> GetUniqueFlags<T>(this T flags) where T : Enum {
+            if (flags is Keys keys) {
+                foreach (Enum value in Enum.GetValues(keys.GetType()))
+                    if (keys.HasFlag(value))
+                        yield return (T)value;
+            }
+        }
     }
 }

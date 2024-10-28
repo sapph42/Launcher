@@ -6,7 +6,11 @@
     "GridLocation": "1, 1",
     "AdminOnly": false,
     "Background": "128, 64, 0",
-    "ReferenceType": 1
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "ADUC",
@@ -15,7 +19,11 @@
     "GridLocation": "2, 1",
     "AdminOnly": true,
     "Background": "196, 44, 42",
-    "ReferenceType": 1
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "MMC",
@@ -24,115 +32,232 @@
     "GridLocation": "3, 1",
     "AdminOnly": false,
     "Background": "196, 44, 42",
-    "ReferenceType": 1
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
-    "Caption": "Bomgar Console",
-    "Path": "C:\\Program Files\\Bomgar\\Representative Console\\chat.gsc.health.mil\\bomgar-rep.exe",
-    "Arguments": "",
+    "Caption": "Update-VoIPMapping",
+    "Path": "C:\\Users\\nicholas.j.gibson10\\OneDrive - militaryhealth\\Documents\\Source\\Update-VoIPMapping.ps1",
+    "Arguments": "-ExecutionPolicy Bypass",
     "GridLocation": "4, 1",
     "AdminOnly": false,
-    "Background": "255, 85, 0",
-    "ReferenceType": 1
+    "Background": "68, 119, 209",
+    "ReferenceType": 4,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "XRayVision",
     "Path": "\\\\138.138.36.214\\Apteryx\\XrayVisionDCV.exe",
     "Arguments": "",
     "GridLocation": "1, 2",
-    "AdminOnly": true,
+    "AdminOnly": false,
     "Background": "Navy",
-    "ReferenceType": 1
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "3, 2",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "Publish New LogLookupTool",
-    "Path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-    "Arguments": "-File \"\\\\eamcfs01\\dept$\\_EAMC_DATA\\workgroup\\IMD\\System Administration\\_AdminApps\\EAMC Log Lookup Tool\\Publish-NewVersion.ps1\" -ExecutionPolicy Bypass",
-    "GridLocation": "1, 3",
-    "AdminOnly": true,
-    "Background": "68, 119, 209",
-    "ReferenceType": 1
-  },
-  {
-    "Caption": "Update-VoIPMapping",
-    "Path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-    "Arguments": "-File \"C:\\Users\\nicholas.j.gibson10\\OneDrive - militaryhealth\\Documents\\Source\\Update-VoIPMapping.ps1\" -ExecutionPolicy Bypass",
-    "GridLocation": "2, 3",
+    "Caption": "Solve-DCVProblems",
+    "Path": "C:\\Users\\nicholas.j.gibson10\\OneDrive - militaryhealth\\Solve-DCVProblems.ps1",
+    "Arguments": "-ExecutionPolicy Bypass",
+    "GridLocation": "2, 2",
     "AdminOnly": false,
     "Background": "68, 119, 209",
-    "ReferenceType": 1
-  },
-  {
-    "Caption": "SQL Server Management Studio",
-    "Path": "C:\\Program Files (x86)\\Microsoft SQL Server Management Studio 19\\Common7\\IDE\\Ssms.exe",
-    "Arguments": "",
-    "GridLocation": "1, 4",
-    "AdminOnly": true,
-    "Background": "247, 179, 0",
-    "ReferenceType": 1
-  },
-  {
-    "Caption": "Visual Studio 19",
-    "Path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Professional\\Common7\\IDE\\devenv.exe",
-    "Arguments": null,
-    "GridLocation": "2, 4",
-    "AdminOnly": false,
-    "Background": "189, 139, 243",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "Visual Studio 22",
-    "Path": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\Common7\\IDE\\devenv.exe",
-    "Arguments": "",
-    "GridLocation": "3, 4",
-    "AdminOnly": false,
-    "Background": "189, 139, 243",
-    "ReferenceType": 1
-  },
-  {
-    "Caption": "Notepad++",
-    "Path": "C:\\Program Files\\Notepad++\\notepad++.exe",
-    "Arguments": null,
-    "GridLocation": "4, 4",
-    "AdminOnly": false,
-    "Background": "147, 213, 67",
-    "ReferenceType": 1
+    "ReferenceType": 4,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "RDP to AP805",
     "Path": "C:\\Windows\\System32\\mstsc.exe",
     "Arguments": "/v:EAMCAP805",
-    "GridLocation": "1, 5",
+    "GridLocation": "3, 2",
     "AdminOnly": false,
     "Background": "White",
-    "ReferenceType": 1
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "Report Generator",
+    "Path": "S:\\ReportGenerator\\ReportGenerator.exe",
+    "Arguments": "",
+    "GridLocation": "4, 2",
+    "AdminOnly": false,
+    "Background": "Blue",
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "Sign LogLookupTool",
+    "Path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "Arguments": "-NoExit -Command $cert=Get-ChildItem -Path Cert:\\CurrentUser\\My -CodeSigningCert; Set-AuthenticodeSignature -IncludeChain all -Certificate $cert -FilePath 'C:\\Users\\nicholas.j.gibson10\\OneDrive - militaryhealth\\Documents\\Source\\repos\\EAMC Log Lookup Tool\\Log Lookup Tool\\bin\\Release\\Log Lookup Tool.exe'",
+    "GridLocation": "1, 3",
+    "AdminOnly": false,
+    "Background": "Black",
+    "ReferenceType": 4,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "Publish New LogLookupTool",
+    "Path": "\\\\eamcfs01\\dept$\\_EAMC_DATA\\workgroup\\IMD\\System Administration\\_AdminApps\\EAMC Log Lookup Tool\\Publish-NewVersion.ps1",
+    "Arguments": "-ExecutionPolicy Bypass",
+    "GridLocation": "2, 3",
+    "AdminOnly": false,
+    "Background": "68, 119, 209",
+    "ReferenceType": 4,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "Sign Launcher",
+    "Path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "Arguments": "-Command $cert=Get-ChildItem -Path Cert:\\CurrentUser\\My -CodeSigningCert; Set-AuthenticodeSignature -IncludeChain all -Certificate $cert -FilePath 'C:\\Users\\nicholas.j.gibson10\\OneDrive - militaryhealth\\Documents\\Source\\repos\\Launcher\\LOCAL BINARY\\Launcher.exe'",
+    "GridLocation": "3, 3",
+    "AdminOnly": false,
+    "Background": "Black",
+    "ReferenceType": 4,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "Publish New Launcher",
+    "Path": "\\\\eamcfs01\\dept$\\_EAMC_DATA\\Workgroup\\IMD\\System Administration\\_AdminApps\\Launcher\\Publish-NewVersion.ps1",
+    "Arguments": "-ExecutionPolicy Bypass",
+    "GridLocation": "4, 3",
+    "AdminOnly": false,
+    "Background": "68, 119, 209",
+    "ReferenceType": 4,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "Sign UDM",
+    "Path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "Arguments": "-NoExit -Command $cert=Get-ChildItem -Path Cert:\\CurrentUser\\My -CodeSigningCert; Set-AuthenticodeSignature -IncludeChain all -Certificate $cert -FilePath 'C:\\Users\\nicholas.j.gibson10\\OneDrive - militaryhealth\\Documents\\Source\\repos\\UserDataBackup\\BINARY\\UserDataManagement.exe'",
+    "GridLocation": "5, 3",
+    "AdminOnly": false,
+    "Background": "Black",
+    "ReferenceType": 4,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "SQL Server Management Studio",
+    "Path": "C:\\Program Files (x86)\\Microsoft SQL Server Management Studio 20\\Common7\\IDE\\Ssms.exe",
+    "Arguments": "",
+    "GridLocation": "1, 4",
+    "AdminOnly": true,
+    "Background": "247, 179, 0",
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "Visual Studio 22",
+    "Path": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\Common7\\IDE\\devenv.exe",
+    "Arguments": "",
+    "GridLocation": "2, 4",
+    "AdminOnly": false,
+    "Background": "189, 139, 243",
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "Notepad++",
+    "Path": "C:\\Program Files\\Notepad++\\notepad++.exe",
+    "Arguments": "",
+    "GridLocation": "3, 4",
+    "AdminOnly": false,
+    "Background": "147, 213, 67",
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "PowerShell ISE",
+    "Path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
+    "Arguments": "",
+    "GridLocation": "4, 4",
+    "AdminOnly": false,
+    "Background": "94, 190, 221",
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "MSTSC",
     "Path": "C:\\Windows\\System32\\mstsc.exe",
     "Arguments": "",
-    "GridLocation": "2, 5",
+    "GridLocation": "1, 5",
     "AdminOnly": false,
     "Background": "White",
-    "ReferenceType": 1
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
-    "Caption": "",
-    "Path": null,
+    "Caption": "ENTAPPs",
+    "Path": "\\\\EAMCAP015002\\ENTAPPs",
     "Arguments": null,
+    "GridLocation": "2, 5",
+    "AdminOnly": false,
+    "Background": "255, 223, 0",
+    "ReferenceType": 2,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
+  },
+  {
+    "Caption": "RegEdit",
+    "Path": "C:\\Windows\\regedit.exe",
+    "Arguments": "",
     "GridLocation": "3, 5",
     "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
+    "Background": "Aqua",
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "CMD",
@@ -141,7 +266,11 @@
     "GridLocation": "1, 6",
     "AdminOnly": false,
     "Background": "Black",
-    "ReferenceType": 1
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "PowerShell",
@@ -150,7 +279,11 @@
     "GridLocation": "2, 6",
     "AdminOnly": false,
     "Background": "Black",
-    "ReferenceType": 1
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "Calculator",
@@ -159,204 +292,140 @@
     "GridLocation": "3, 6",
     "AdminOnly": false,
     "Background": "ControlDarkDark",
-    "ReferenceType": 1
-  },
-  {
-    "Caption": "Solve-DCVProblems",
-    "Path": "powershell.exe",
-    "Arguments": "-File \"C:\\Users\\nicholas.j.gibson10\\OneDrive - militaryhealth\\Solve-DCVProblems.ps1\" -ExecutionPolicy Bypass",
-    "GridLocation": "2, 2",
-    "AdminOnly": false,
-    "Background": "68, 119, 209",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "Snipping Tool",
-    "Path": "C:\\Program Files\\WindowsApps\\Microsoft.ScreenSketch_11.2310.54.0_x64__8wekyb3d8bbwe\\SnippingTool\\SnippingTool.exe",
-    "Arguments": "",
-    "GridLocation": "4, 6",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": true,
+    "KeyModifiers": 6,
+    "KeyTarget": 46
   },
   {
     "Caption": "ATAAPS",
-    "Path": "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe",
-    "Arguments": "https://ataaps.csd.disa.mil/ataaps_DOD1/ControllerServlet",
+    "Path": "https://ataaps.csd.disa.mil/ataaps_DOD1/ControllerServlet",
+    "Arguments": "",
     "GridLocation": "1, 7",
     "AdminOnly": false,
     "Background": "Transparent",
-    "ReferenceType": 3
+    "ReferenceType": 3,
+    "TargetBrowser": 1,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "DMHRSi",
-    "Path": "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe",
-    "Arguments": "https://dmhrsi.csd.disa.mil/OA_HTML/OA.jsp?OAFunc=OAHOMEPAGE",
+    "Path": "https://dmhrsi.csd.disa.mil/OA_HTML/OA.jsp?OAFunc=OAHOMEPAGE",
+    "Arguments": "",
     "GridLocation": "2, 7",
     "AdminOnly": false,
     "Background": "Transparent",
-    "ReferenceType": 3
+    "ReferenceType": 3,
+    "TargetBrowser": 2,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "DOC",
-    "Path": "microsoft-edge:",
-    "Arguments": "https://eamcws200418.med.ds.osd.mil/apps/DOC/MyOrg",
+    "Path": "https://eamcws200418.med.ds.osd.mil/apps/DOC/MyOrg",
+    "Arguments": "",
     "GridLocation": "3, 7",
     "AdminOnly": false,
     "Background": "Transparent",
-    "ReferenceType": 3
+    "ReferenceType": 3,
+    "TargetBrowser": 1,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "GFUD",
-    "Path": "microsoft-edge:",
-    "Arguments": "https://portal.apps.deas.mil/",
+    "Path": "https://portal.apps.deas.mil/",
+    "Arguments": "",
     "GridLocation": "1, 8",
     "AdminOnly": false,
     "Background": "0, 128, 192",
-    "ReferenceType": 3
+    "ReferenceType": 3,
+    "TargetBrowser": 1,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "ARMIS",
-    "Path": "microsoft-edge:",
-    "Arguments": "https://afe.armis.health.mil/login",
+    "Path": "https://afe.armis.health.mil/login",
+    "Arguments": "",
     "GridLocation": "2, 8",
     "AdminOnly": false,
     "Background": "128, 0, 255",
-    "ReferenceType": 3
+    "ReferenceType": 3,
+    "TargetBrowser": 1,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "EBLLS",
-    "Path": "microsoft-edge:",
-    "Arguments": "https://ias.csd.disa.mil/eblls/#/Lookup/Edipi",
+    "Path": "https://ias.csd.disa.mil/eblls/#/Lookup/Edipi",
+    "Arguments": "",
     "GridLocation": "3, 8",
     "AdminOnly": false,
     "Background": "Aqua",
-    "ReferenceType": 3
+    "ReferenceType": 3,
+    "TargetBrowser": 1,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
     "Caption": "DHA APL",
-    "Path": "microsoft-edge:",
-    "Arguments": "https://militaryhealth.sharepoint-mil.us/sites/RMED-AA/SitePages/APL-Home.aspx",
+    "Path": "https://militaryhealth.sharepoint-mil.us/sites/RMED-AA/SitePages/APL-Home.aspx",
+    "Arguments": "",
     "GridLocation": "4, 8",
     "AdminOnly": false,
     "Background": "64, 128, 128",
-    "ReferenceType": 1
+    "ReferenceType": 3,
+    "TargetBrowser": 1,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
-    "Caption": "PowerShell ISE",
-    "Path": "c:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell_ISE.exe",
+    "Caption": "ServiceNow",
+    "Path": "https://mhsservicehelpdesk.servicenowservices.health.mil/",
     "Arguments": "",
-    "GridLocation": "5, 4",
+    "GridLocation": "1, 9",
     "AdminOnly": false,
-    "Background": "94, 190, 221",
-    "ReferenceType": 1
+    "Background": "0, 0, 160",
+    "ReferenceType": 3,
+    "TargetBrowser": 1,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
-    "Caption": "",
-    "Path": "",
+    "Caption": "ServiceNow Priority",
+    "Path": "C:\\Users\\nicholas.j.gibson10\\OneDrive - militaryhealth\\My Pictures\\ServiceNow Priority.png",
     "Arguments": "",
-    "GridLocation": "3, 3",
+    "GridLocation": "2, 9",
     "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
+    "Background": "255, 128, 64",
+    "ReferenceType": 5,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   },
   {
-    "Caption": "",
-    "Path": "",
+    "Caption": "Bomgar Console",
+    "Path": "C:\\Program Files\\Bomgar\\Representative Console\\chat.gsc.health.mil\\bomgar-rep.exe",
     "Arguments": "",
-    "GridLocation": "4, 2",
+    "GridLocation": "3, 9",
     "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "4, 3",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "4, 5",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "4, 7",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "5, 1",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "5, 2",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "5, 3",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "5, 5",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "5, 6",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "5, 7",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
-  },
-  {
-    "Caption": "",
-    "Path": "",
-    "Arguments": "",
-    "GridLocation": "5, 8",
-    "AdminOnly": false,
-    "Background": "ControlDarkDark",
-    "ReferenceType": 0
+    "Background": "255, 85, 0",
+    "ReferenceType": 1,
+    "TargetBrowser": 0,
+    "HasHotKeySet": false,
+    "KeyModifiers": 0,
+    "KeyTarget": 0
   }
 ]

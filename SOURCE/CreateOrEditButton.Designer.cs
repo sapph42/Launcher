@@ -37,7 +37,11 @@ namespace Launcher {
             this.ProgramColorButton = new System.Windows.Forms.Button();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.ExeTab = new System.Windows.Forms.TabPage();
+            this.label13 = new System.Windows.Forms.Label();
+            this.ProgramHotkeyTextBox = new System.Windows.Forms.TextBox();
             this.FolderTab = new System.Windows.Forms.TabPage();
+            this.label14 = new System.Windows.Forms.Label();
+            this.FolderHotkeyTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.FolderOkButton = new System.Windows.Forms.Button();
             this.FolderCancelButton = new System.Windows.Forms.Button();
@@ -47,6 +51,8 @@ namespace Launcher {
             this.FolderBrowseButton = new System.Windows.Forms.Button();
             this.FolderPathTextBox = new System.Windows.Forms.TextBox();
             this.WebTab = new System.Windows.Forms.TabPage();
+            this.label15 = new System.Windows.Forms.Label();
+            this.UriHotkeyTextBox = new System.Windows.Forms.TextBox();
             this.UriColorButton = new System.Windows.Forms.Button();
             this.ChromeRadio = new System.Windows.Forms.RadioButton();
             this.FirefoxRadio = new System.Windows.Forms.RadioButton();
@@ -58,6 +64,8 @@ namespace Launcher {
             this.label7 = new System.Windows.Forms.Label();
             this.UriCaptionTextBox = new System.Windows.Forms.TextBox();
             this.PsTab = new System.Windows.Forms.TabPage();
+            this.label16 = new System.Windows.Forms.Label();
+            this.PowerShellHotkeyTextBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.PowerShellOkButton = new System.Windows.Forms.Button();
             this.PowerShellCancelButton = new System.Windows.Forms.Button();
@@ -69,11 +77,23 @@ namespace Launcher {
             this.PowerShellBrowseButton = new System.Windows.Forms.Button();
             this.PowerShellAdminCheck = new System.Windows.Forms.CheckBox();
             this.PowerShellTargetTextBox = new System.Windows.Forms.TextBox();
+            this.FileTab = new System.Windows.Forms.TabPage();
+            this.label17 = new System.Windows.Forms.Label();
+            this.FileHotkeyTextBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.FileOkButton = new System.Windows.Forms.Button();
+            this.FileCancelButton = new System.Windows.Forms.Button();
+            this.FileColorButton = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.FileCaptionTextBox = new System.Windows.Forms.TextBox();
+            this.FileBrowseButton = new System.Windows.Forms.Button();
+            this.FileTargetTextBox = new System.Windows.Forms.TextBox();
             this.TabControl.SuspendLayout();
             this.ExeTab.SuspendLayout();
             this.FolderTab.SuspendLayout();
             this.WebTab.SuspendLayout();
             this.PsTab.SuspendLayout();
+            this.FileTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -113,7 +133,7 @@ namespace Launcher {
             // 
             // ProgramOkButton
             // 
-            this.ProgramOkButton.Location = new System.Drawing.Point(9, 172);
+            this.ProgramOkButton.Location = new System.Drawing.Point(9, 200);
             this.ProgramOkButton.Name = "ProgramOkButton";
             this.ProgramOkButton.Size = new System.Drawing.Size(75, 23);
             this.ProgramOkButton.TabIndex = 5;
@@ -124,7 +144,7 @@ namespace Launcher {
             // ProgramCancelButton
             // 
             this.ProgramCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.ProgramCancelButton.Location = new System.Drawing.Point(293, 172);
+            this.ProgramCancelButton.Location = new System.Drawing.Point(293, 200);
             this.ProgramCancelButton.Name = "ProgramCancelButton";
             this.ProgramCancelButton.Size = new System.Drawing.Size(75, 23);
             this.ProgramCancelButton.TabIndex = 6;
@@ -184,14 +204,17 @@ namespace Launcher {
             this.TabControl.Controls.Add(this.FolderTab);
             this.TabControl.Controls.Add(this.WebTab);
             this.TabControl.Controls.Add(this.PsTab);
+            this.TabControl.Controls.Add(this.FileTab);
             this.TabControl.Location = new System.Drawing.Point(12, 12);
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(382, 227);
+            this.TabControl.Size = new System.Drawing.Size(382, 255);
             this.TabControl.TabIndex = 12;
             // 
             // ExeTab
             // 
+            this.ExeTab.Controls.Add(this.label13);
+            this.ExeTab.Controls.Add(this.ProgramHotkeyTextBox);
             this.ExeTab.Controls.Add(this.label1);
             this.ExeTab.Controls.Add(this.ProgramOkButton);
             this.ExeTab.Controls.Add(this.ProgramCancelButton);
@@ -206,13 +229,34 @@ namespace Launcher {
             this.ExeTab.Location = new System.Drawing.Point(4, 22);
             this.ExeTab.Name = "ExeTab";
             this.ExeTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ExeTab.Size = new System.Drawing.Size(374, 201);
+            this.ExeTab.Size = new System.Drawing.Size(374, 229);
             this.ExeTab.TabIndex = 0;
             this.ExeTab.Text = "Programs";
             this.ExeTab.UseVisualStyleBackColor = true;
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(6, 163);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(74, 13);
+            this.label13.TabIndex = 12;
+            this.label13.Text = "Global Hotkey";
+            // 
+            // ProgramHotkeyTextBox
+            // 
+            this.ProgramHotkeyTextBox.Location = new System.Drawing.Point(128, 160);
+            this.ProgramHotkeyTextBox.Name = "ProgramHotkeyTextBox";
+            this.ProgramHotkeyTextBox.Size = new System.Drawing.Size(240, 20);
+            this.ProgramHotkeyTextBox.TabIndex = 13;
+            this.ProgramHotkeyTextBox.Enter += new System.EventHandler(this.HotkeyTextBox_Enter);
+            this.ProgramHotkeyTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HotkeyTextBox_KeyDown);
+            this.ProgramHotkeyTextBox.Leave += new System.EventHandler(this.HotkeyTextBox_Leave);
+            // 
             // FolderTab
             // 
+            this.FolderTab.Controls.Add(this.label14);
+            this.FolderTab.Controls.Add(this.FolderHotkeyTextBox);
             this.FolderTab.Controls.Add(this.label4);
             this.FolderTab.Controls.Add(this.FolderOkButton);
             this.FolderTab.Controls.Add(this.FolderCancelButton);
@@ -224,10 +268,29 @@ namespace Launcher {
             this.FolderTab.Location = new System.Drawing.Point(4, 22);
             this.FolderTab.Name = "FolderTab";
             this.FolderTab.Padding = new System.Windows.Forms.Padding(3);
-            this.FolderTab.Size = new System.Drawing.Size(374, 201);
+            this.FolderTab.Size = new System.Drawing.Size(374, 229);
             this.FolderTab.TabIndex = 1;
             this.FolderTab.Text = "Folders";
             this.FolderTab.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 163);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(74, 13);
+            this.label14.TabIndex = 20;
+            this.label14.Text = "Global Hotkey";
+            // 
+            // FolderHotkeyTextBox
+            // 
+            this.FolderHotkeyTextBox.Location = new System.Drawing.Point(128, 160);
+            this.FolderHotkeyTextBox.Name = "FolderHotkeyTextBox";
+            this.FolderHotkeyTextBox.Size = new System.Drawing.Size(240, 20);
+            this.FolderHotkeyTextBox.TabIndex = 21;
+            this.FolderHotkeyTextBox.Enter += new System.EventHandler(this.HotkeyTextBox_Enter);
+            this.FolderHotkeyTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HotkeyTextBox_KeyDown);
+            this.FolderHotkeyTextBox.Leave += new System.EventHandler(this.HotkeyTextBox_Leave);
             // 
             // label4
             // 
@@ -240,7 +303,7 @@ namespace Launcher {
             // 
             // FolderOkButton
             // 
-            this.FolderOkButton.Location = new System.Drawing.Point(9, 172);
+            this.FolderOkButton.Location = new System.Drawing.Point(9, 200);
             this.FolderOkButton.Name = "FolderOkButton";
             this.FolderOkButton.Size = new System.Drawing.Size(75, 23);
             this.FolderOkButton.TabIndex = 16;
@@ -251,7 +314,7 @@ namespace Launcher {
             // FolderCancelButton
             // 
             this.FolderCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.FolderCancelButton.Location = new System.Drawing.Point(293, 172);
+            this.FolderCancelButton.Location = new System.Drawing.Point(293, 200);
             this.FolderCancelButton.Name = "FolderCancelButton";
             this.FolderCancelButton.Size = new System.Drawing.Size(75, 23);
             this.FolderCancelButton.TabIndex = 17;
@@ -307,6 +370,8 @@ namespace Launcher {
             // 
             // WebTab
             // 
+            this.WebTab.Controls.Add(this.label15);
+            this.WebTab.Controls.Add(this.UriHotkeyTextBox);
             this.WebTab.Controls.Add(this.UriColorButton);
             this.WebTab.Controls.Add(this.ChromeRadio);
             this.WebTab.Controls.Add(this.FirefoxRadio);
@@ -320,10 +385,29 @@ namespace Launcher {
             this.WebTab.Location = new System.Drawing.Point(4, 22);
             this.WebTab.Name = "WebTab";
             this.WebTab.Padding = new System.Windows.Forms.Padding(3);
-            this.WebTab.Size = new System.Drawing.Size(374, 201);
+            this.WebTab.Size = new System.Drawing.Size(374, 229);
             this.WebTab.TabIndex = 2;
             this.WebTab.Text = "WebPage";
             this.WebTab.UseVisualStyleBackColor = true;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 172);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(74, 13);
+            this.label15.TabIndex = 22;
+            this.label15.Text = "Global Hotkey";
+            // 
+            // UriHotkeyTextBox
+            // 
+            this.UriHotkeyTextBox.Location = new System.Drawing.Point(128, 169);
+            this.UriHotkeyTextBox.Name = "UriHotkeyTextBox";
+            this.UriHotkeyTextBox.Size = new System.Drawing.Size(240, 20);
+            this.UriHotkeyTextBox.TabIndex = 23;
+            this.UriHotkeyTextBox.Enter += new System.EventHandler(this.HotkeyTextBox_Enter);
+            this.UriHotkeyTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HotkeyTextBox_KeyDown);
+            this.UriHotkeyTextBox.Leave += new System.EventHandler(this.HotkeyTextBox_Leave);
             // 
             // UriColorButton
             // 
@@ -386,7 +470,7 @@ namespace Launcher {
             // 
             // UriOkButton
             // 
-            this.UriOkButton.Location = new System.Drawing.Point(9, 171);
+            this.UriOkButton.Location = new System.Drawing.Point(9, 200);
             this.UriOkButton.Name = "UriOkButton";
             this.UriOkButton.Size = new System.Drawing.Size(75, 23);
             this.UriOkButton.TabIndex = 11;
@@ -397,7 +481,7 @@ namespace Launcher {
             // UriCancelButton
             // 
             this.UriCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.UriCancelButton.Location = new System.Drawing.Point(293, 171);
+            this.UriCancelButton.Location = new System.Drawing.Point(293, 200);
             this.UriCancelButton.Name = "UriCancelButton";
             this.UriCancelButton.Size = new System.Drawing.Size(75, 23);
             this.UriCancelButton.TabIndex = 12;
@@ -423,6 +507,8 @@ namespace Launcher {
             // 
             // PsTab
             // 
+            this.PsTab.Controls.Add(this.label16);
+            this.PsTab.Controls.Add(this.PowerShellHotkeyTextBox);
             this.PsTab.Controls.Add(this.label8);
             this.PsTab.Controls.Add(this.PowerShellOkButton);
             this.PsTab.Controls.Add(this.PowerShellCancelButton);
@@ -437,10 +523,29 @@ namespace Launcher {
             this.PsTab.Location = new System.Drawing.Point(4, 22);
             this.PsTab.Name = "PsTab";
             this.PsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.PsTab.Size = new System.Drawing.Size(374, 201);
+            this.PsTab.Size = new System.Drawing.Size(374, 229);
             this.PsTab.TabIndex = 3;
             this.PsTab.Text = "PowerShell";
             this.PsTab.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(6, 163);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(74, 13);
+            this.label16.TabIndex = 24;
+            this.label16.Text = "Global Hotkey";
+            // 
+            // PowerShellHotkeyTextBox
+            // 
+            this.PowerShellHotkeyTextBox.Location = new System.Drawing.Point(128, 160);
+            this.PowerShellHotkeyTextBox.Name = "PowerShellHotkeyTextBox";
+            this.PowerShellHotkeyTextBox.Size = new System.Drawing.Size(240, 20);
+            this.PowerShellHotkeyTextBox.TabIndex = 25;
+            this.PowerShellHotkeyTextBox.Enter += new System.EventHandler(this.HotkeyTextBox_Enter);
+            this.PowerShellHotkeyTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HotkeyTextBox_KeyDown);
+            this.PowerShellHotkeyTextBox.Leave += new System.EventHandler(this.HotkeyTextBox_Leave);
             // 
             // label8
             // 
@@ -453,18 +558,18 @@ namespace Launcher {
             // 
             // PowerShellOkButton
             // 
-            this.PowerShellOkButton.Location = new System.Drawing.Point(9, 172);
+            this.PowerShellOkButton.Location = new System.Drawing.Point(9, 200);
             this.PowerShellOkButton.Name = "PowerShellOkButton";
             this.PowerShellOkButton.Size = new System.Drawing.Size(75, 23);
             this.PowerShellOkButton.TabIndex = 16;
             this.PowerShellOkButton.Text = "OK";
             this.PowerShellOkButton.UseVisualStyleBackColor = true;
-            this.PowerShellOkButton.Click += new System.EventHandler(this.UriOkButton_Click);
+            this.PowerShellOkButton.Click += new System.EventHandler(this.PowerShellOkButton_Click);
             // 
             // PowerShellCancelButton
             // 
             this.PowerShellCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.PowerShellCancelButton.Location = new System.Drawing.Point(293, 172);
+            this.PowerShellCancelButton.Location = new System.Drawing.Point(293, 200);
             this.PowerShellCancelButton.Name = "PowerShellCancelButton";
             this.PowerShellCancelButton.Size = new System.Drawing.Size(75, 23);
             this.PowerShellCancelButton.TabIndex = 17;
@@ -544,13 +649,127 @@ namespace Launcher {
             this.PowerShellTargetTextBox.TabIndex = 18;
             this.PowerShellTargetTextBox.TabStop = false;
             // 
+            // FileTab
+            // 
+            this.FileTab.Controls.Add(this.label17);
+            this.FileTab.Controls.Add(this.FileHotkeyTextBox);
+            this.FileTab.Controls.Add(this.label11);
+            this.FileTab.Controls.Add(this.FileOkButton);
+            this.FileTab.Controls.Add(this.FileCancelButton);
+            this.FileTab.Controls.Add(this.FileColorButton);
+            this.FileTab.Controls.Add(this.label12);
+            this.FileTab.Controls.Add(this.FileCaptionTextBox);
+            this.FileTab.Controls.Add(this.FileBrowseButton);
+            this.FileTab.Controls.Add(this.FileTargetTextBox);
+            this.FileTab.Location = new System.Drawing.Point(4, 22);
+            this.FileTab.Name = "FileTab";
+            this.FileTab.Padding = new System.Windows.Forms.Padding(3);
+            this.FileTab.Size = new System.Drawing.Size(374, 229);
+            this.FileTab.TabIndex = 4;
+            this.FileTab.Text = "Documents";
+            this.FileTab.UseVisualStyleBackColor = true;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 163);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(74, 13);
+            this.label17.TabIndex = 33;
+            this.label17.Text = "Global Hotkey";
+            // 
+            // FileHotkeyTextBox
+            // 
+            this.FileHotkeyTextBox.Location = new System.Drawing.Point(128, 160);
+            this.FileHotkeyTextBox.Name = "FileHotkeyTextBox";
+            this.FileHotkeyTextBox.Size = new System.Drawing.Size(240, 20);
+            this.FileHotkeyTextBox.TabIndex = 34;
+            this.FileHotkeyTextBox.Enter += new System.EventHandler(this.HotkeyTextBox_Enter);
+            this.FileHotkeyTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HotkeyTextBox_KeyDown);
+            this.FileHotkeyTextBox.Leave += new System.EventHandler(this.HotkeyTextBox_Leave);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 7);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(130, 13);
+            this.label11.TabIndex = 23;
+            this.label11.Text = "Location of File to Invoke:";
+            // 
+            // FileOkButton
+            // 
+            this.FileOkButton.Location = new System.Drawing.Point(9, 200);
+            this.FileOkButton.Name = "FileOkButton";
+            this.FileOkButton.Size = new System.Drawing.Size(75, 23);
+            this.FileOkButton.TabIndex = 27;
+            this.FileOkButton.Text = "OK";
+            this.FileOkButton.UseVisualStyleBackColor = true;
+            this.FileOkButton.Click += new System.EventHandler(this.FileOkButton_Click);
+            // 
+            // FileCancelButton
+            // 
+            this.FileCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.FileCancelButton.Location = new System.Drawing.Point(293, 200);
+            this.FileCancelButton.Name = "FileCancelButton";
+            this.FileCancelButton.Size = new System.Drawing.Size(75, 23);
+            this.FileCancelButton.TabIndex = 28;
+            this.FileCancelButton.Text = "Cancel";
+            this.FileCancelButton.UseVisualStyleBackColor = true;
+            this.FileCancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            // 
+            // FileColorButton
+            // 
+            this.FileColorButton.Location = new System.Drawing.Point(345, 81);
+            this.FileColorButton.Name = "FileColorButton";
+            this.FileColorButton.Size = new System.Drawing.Size(23, 21);
+            this.FileColorButton.TabIndex = 32;
+            this.FileColorButton.UseVisualStyleBackColor = true;
+            this.FileColorButton.Click += new System.EventHandler(this.ColorButton_Click);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 137);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(62, 13);
+            this.label12.TabIndex = 25;
+            this.label12.Text = "Button Text";
+            // 
+            // FileCaptionTextBox
+            // 
+            this.FileCaptionTextBox.Location = new System.Drawing.Point(128, 134);
+            this.FileCaptionTextBox.Name = "FileCaptionTextBox";
+            this.FileCaptionTextBox.Size = new System.Drawing.Size(240, 20);
+            this.FileCaptionTextBox.TabIndex = 26;
+            // 
+            // FileBrowseButton
+            // 
+            this.FileBrowseButton.Location = new System.Drawing.Point(293, 6);
+            this.FileBrowseButton.Name = "FileBrowseButton";
+            this.FileBrowseButton.Size = new System.Drawing.Size(75, 23);
+            this.FileBrowseButton.TabIndex = 24;
+            this.FileBrowseButton.Text = "Browse ...";
+            this.FileBrowseButton.UseVisualStyleBackColor = true;
+            this.FileBrowseButton.Click += new System.EventHandler(this.FileBrowseButton_Click);
+            // 
+            // FileTargetTextBox
+            // 
+            this.FileTargetTextBox.BackColor = System.Drawing.SystemColors.Control;
+            this.FileTargetTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.FileTargetTextBox.Location = new System.Drawing.Point(9, 29);
+            this.FileTargetTextBox.Multiline = true;
+            this.FileTargetTextBox.Name = "FileTargetTextBox";
+            this.FileTargetTextBox.Size = new System.Drawing.Size(359, 46);
+            this.FileTargetTextBox.TabIndex = 29;
+            this.FileTargetTextBox.TabStop = false;
+            // 
             // CreateOrEditButton
             // 
             this.AcceptButton = this.ProgramOkButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.ProgramCancelButton;
-            this.ClientSize = new System.Drawing.Size(401, 249);
+            this.ClientSize = new System.Drawing.Size(401, 275);
             this.Controls.Add(this.TabControl);
             this.Name = "CreateOrEditButton";
             this.Text = "Create New Launcher Button";
@@ -565,6 +784,8 @@ namespace Launcher {
             this.WebTab.PerformLayout();
             this.PsTab.ResumeLayout(false);
             this.PsTab.PerformLayout();
+            this.FileTab.ResumeLayout(false);
+            this.FileTab.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -616,5 +837,24 @@ namespace Launcher {
         private System.Windows.Forms.CheckBox PowerShellAdminCheck;
         private System.Windows.Forms.TextBox PowerShellTargetTextBox;
         private System.Windows.Forms.Button UriColorButton;
+        private System.Windows.Forms.TabPage FileTab;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button FileOkButton;
+        private System.Windows.Forms.Button FileCancelButton;
+        private System.Windows.Forms.Button FileColorButton;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox FileCaptionTextBox;
+        private System.Windows.Forms.Button FileBrowseButton;
+        private System.Windows.Forms.TextBox FileTargetTextBox;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox ProgramHotkeyTextBox;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox FolderHotkeyTextBox;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox UriHotkeyTextBox;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox PowerShellHotkeyTextBox;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox FileHotkeyTextBox;
     }
 }

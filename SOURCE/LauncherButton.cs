@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Windows.Input;
 
 namespace Launcher {
     [JsonObject(MemberSerialization.OptIn)]
@@ -29,7 +30,8 @@ namespace Launcher {
             Program,
             Folder,
             Webpage,
-            Powershell
+            Powershell,
+            File
         }
 
         public enum Browser {
@@ -59,6 +61,11 @@ namespace Launcher {
         [JsonProperty] public Color Background { get; set; } = SystemColors.Control;
         [JsonProperty] public RefType ReferenceType { get; set; }
         [JsonProperty] public Browser TargetBrowser { get; set; }
+        [JsonProperty] public bool HasHotKeySet { get; set; } = false;
+        [JsonProperty] public System.Windows.Input.ModifierKeys KeyModifiers { get; set; } = System.Windows.Input.ModifierKeys.None;
+        [JsonProperty] public Key KeyTarget { get; set; } = Key.None;
+        public Keys Keys => (Keys)KeyInterop.VirtualKeyFromKey(KeyTarget);
+        public int HotKeyId { get; set; } = -1;
         
         public LauncherButton() : this("", "", new Point()) { }
 
@@ -184,14 +191,14 @@ namespace Launcher {
                         ReferenceType = RefType.Folder;
                     else {
                         FileInfo fileInfo = new FileInfo(Path);
-                        if (BrowserPaths.Values.Contains(fileInfo.FullName))
+                        if (BrowserPaths.Values.Contains(fileInfo.FullName) || Path.StartsWith("http"))
                             ReferenceType = RefType.Webpage;
                         else if (fileInfo.Extension == ".exe") 
                             ReferenceType = RefType.Program;
                         else if (fileInfo.Extension == ".ps1")
                             ReferenceType = RefType.Powershell;
                         else
-                            ReferenceType = RefType.Undetermined;
+                            ReferenceType = RefType.File;
                     }
                 } catch { //NOT A FILE OR DIRECTORY
                     if (Path == "powershell.exe" && !string.IsNullOrEmpty(Arguments)) {
@@ -216,34 +223,26 @@ namespace Launcher {
             }
         }
         public static Browser GetBrowser(LauncherButton button) {
-            switch (button.Path) {
-                case var PathVal when new Regex(@".*\\firefox\.exe").IsMatch(PathVal):
-                    return Browser.Firefox;
-                case var PathVal when new Regex(@".*\\chrome\.exe").IsMatch(PathVal):
-                    return Browser.Chrome;
-                case "microsoft-edge:":
-                    return Browser.Edge;
-                default:
-                    return Browser.None;
-            }
+            if (button.TargetBrowser != Browser.None)
+                return button.TargetBrowser;
+            return button.Path switch {
+                var PathVal when new Regex(@".*\\firefox\.exe").IsMatch(PathVal) => Browser.Firefox,
+                var PathVal when new Regex(@".*\\chrome\.exe").IsMatch(PathVal) => Browser.Chrome,
+                "microsoft-edge:" => Browser.Edge,
+                _ => Browser.None,
+            };
         }
         private void SetBrowser() {
             if (Uri.TryCreate(Path, UriKind.Absolute, out _)) {
                 if (TargetBrowser == Browser.None)
                     TargetBrowser = Browser.Edge;
-            } else { 
-                switch (Path) {
-                    case var PathVal when new Regex(@".*\\firefox\.exe").IsMatch(PathVal):
-                        TargetBrowser = Browser.Firefox;
-                        break;
-                    case var PathVal when new Regex(@".*\\chrome\.exe").IsMatch(PathVal):
-                        TargetBrowser = Browser.Chrome;
-                        break;
-                    case "microsoft-edge:":
-                    default:
-                        TargetBrowser = Browser.Edge;
-                        break;
-                }
+            } else {
+                TargetBrowser = Path switch {
+                    var PathVal when new Regex(@".*\\firefox\.exe").IsMatch(PathVal) => Browser.Firefox,
+                    var PathVal when new Regex(@".*\\chrome\.exe").IsMatch(PathVal) => Browser.Chrome,
+                    "microsoft-edge:" => Browser.Edge,
+                    _ => Browser.None,
+                };
             }
         }
         public static string[] ExtractPSPathFromArgument(string argument) {
@@ -311,6 +310,9 @@ namespace Launcher {
                             Path = parsed[0];
                         Arguments = parsed[1];
                     }
+                    break;
+                case RefType.File:
+
                     break;
                 case RefType.Undetermined:
                 case RefType.Folder:
